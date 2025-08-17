@@ -4,6 +4,7 @@ import { toast } from '../../utils/notifications.js';
 import AdminHeader from '../AdminHeader';
 import Footer from '../Footer';
 import VideoLogo from '../VideoLogo';
+import Loading from '../Loading';
 import { contactsApi } from '../../lib/adminApi';
 import { config } from '../../config/environment';
 import '../AdminGallery/AdminGallery.css';
@@ -153,19 +154,7 @@ const AdminContact = () => {
   };
 
   if (loading) {
-    return (
-      <div className="admin-gallery-container">
-        <VideoLogo />
-        <AdminHeader currentPage="contact" />
-        <div className="admin-gallery-content">
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Loading inquiries...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {

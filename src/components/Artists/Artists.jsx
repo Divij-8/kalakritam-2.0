@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigationWithLoading } from '../../hooks/useNavigationWithLoading';
+import { useLoading } from '../../contexts/LoadingContext';
 import { toast } from '../../utils/notifications.js';
 import { useMobileOptimizations } from '../../hooks/useMobileOptimizations';
 import Header from '../Header';
@@ -11,12 +12,11 @@ import './Artists.css';
 import '../Gallery/Gallery.css'; // Import Gallery CSS for modal styles
 
 const Artists = () => {
-  const { navigateWithLoading } = useNavigationWithLoading();
+  const { navigateWithLoading, showLoading, hideLoading } = useNavigationWithLoading();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedArtist, setSelectedArtist] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [artists, setArtists] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const fetchCalled = useRef(false);
   
@@ -32,7 +32,7 @@ const Artists = () => {
 
   const fetchArtists = async () => {
     try {
-      setLoading(true);
+      showLoading();
       const loadingId = toast.dataLoading('Loading artists...');
       
       const response = await fetch(`${config.apiBaseUrl}/artists`);
@@ -52,7 +52,7 @@ const Artists = () => {
       setError('Failed to connect to server');
       toast.serverError('Failed to connect to server');
     } finally {
-      setLoading(false);
+      hideLoading();
     }
   };
 
@@ -73,22 +73,6 @@ const Artists = () => {
   const filteredArtists = selectedCategory === 'all' 
     ? artists 
     : artists.filter(artist => (artist.specialization || 'general') === selectedCategory);
-
-  if (loading) {
-    return (
-      <div className="artists-container">
-        <VideoLogo />
-        <Header currentPage="artists" />
-        <div className="artists-page-content">
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Loading artists...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
 
   if (error) {
     return (

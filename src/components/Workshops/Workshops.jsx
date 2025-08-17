@@ -20,12 +20,11 @@ import './Workshops.css';
 import '../Gallery/Gallery.css';
 
 const Workshops = () => {
-  const { navigateWithLoading } = useNavigationWithLoading();
+  const { navigateWithLoading, showLoading, hideLoading } = useNavigationWithLoading();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [workshops, setWorkshops] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const fetchCalled = useRef(false);
   
@@ -86,7 +85,7 @@ const Workshops = () => {
 
   const fetchWorkshops = async () => {
     try {
-      setLoading(true);
+      showLoading();
       const loadingId = toast.dataLoading('Loading workshops...');
       
       console.log('Fetching workshops from:', `${config.apiBaseUrl}/workshops`);
@@ -109,7 +108,7 @@ const Workshops = () => {
       setError('Failed to connect to server');
       toast.serverError('Failed to connect to server');
     } finally {
-      setLoading(false);
+      hideLoading();
     }
   };
 
@@ -126,22 +125,6 @@ const Workshops = () => {
 
   // Since the API doesn't return categories, show all workshops
   const filteredWorkshops = workshops;
-
-  if (loading) {
-    return (
-      <div className="workshops-container">
-        <VideoLogo />
-        <Header currentPage="workshops" />
-        <div className="workshops-page-content">
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Loading workshops...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
 
   if (error) {
     return (

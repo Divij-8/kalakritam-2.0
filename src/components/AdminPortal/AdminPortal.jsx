@@ -3,6 +3,7 @@ import { useNavigationWithLoading } from '../../hooks/useNavigationWithLoading';
 import AdminHeader from '../AdminHeader';
 import Footer from '../Footer';
 import VideoLogo from '../VideoLogo';
+import Loading from '../Loading';
 import { galleryApi, workshopsApi, eventsApi, artistsApi } from '../../lib/adminApi';
 import './AdminPortal.css';
 
@@ -144,10 +145,7 @@ const AdminPortal = () => {
         <section className="admin-quick-stats">
           <h2>Quick Overview</h2>
           {loading ? (
-            <div className="stats-loading">
-              <div className="loading-spinner"></div>
-              <p>Loading dashboard statistics...</p>
-            </div>
+            <Loading />
           ) : (
             <div className="stats-grid">
               <div className="stat-card">

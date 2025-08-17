@@ -6,16 +6,16 @@ import Header from '../Header';
 import Footer from '../Footer';
 import VideoLogo from '../VideoLogo';
 import OptimizedParticles from '../OptimizedParticles';
+import Particles from '../Particles';
 import { config } from '../../config/environment';
 import './Events.css';
 
 const Events = () => {
-  const { navigateWithLoading } = useNavigationWithLoading();
+  const { navigateWithLoading, showLoading, hideLoading } = useNavigationWithLoading();
   const [selectedView, setSelectedView] = useState('upcoming');
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const fetchCalled = useRef(false);
 
@@ -28,7 +28,7 @@ const Events = () => {
 
   const fetchEvents = async () => {
     try {
-      setLoading(true);
+      showLoading();
       const loadingId = toast.dataLoading('Loading events...');
       
       const response = await fetch(`${config.apiBaseUrl}/events`);
@@ -53,25 +53,9 @@ const Events = () => {
       setError('Failed to connect to server');
       toast.serverError('Failed to connect to server');
     } finally {
-      setLoading(false);
+      hideLoading();
     }
   };
-
-  if (loading) {
-    return (
-      <div className="events-container">
-        <VideoLogo />
-        <Header currentPage="events" />
-        <div className="events-page-content">
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Loading events...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
 
   if (error) {
     return (

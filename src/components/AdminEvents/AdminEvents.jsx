@@ -6,6 +6,7 @@ import Footer from '../Footer';
 import VideoLogo from '../VideoLogo';
 import SEOFieldsComponent from '../SEOFieldsComponent';
 import FileUpload from '../FileUpload';
+import Loading from '../Loading';
 import { eventsApi, uploadApi } from '../../lib/adminApi';
 import { config } from '../../config/environment';
 import '../AdminGallery/AdminGallery.css';
@@ -327,19 +328,7 @@ const AdminEvents = () => {
   };
 
   if (loading) {
-    return (
-      <div className="admin-gallery-container">
-        <VideoLogo />
-        <AdminHeader currentPage="events" />
-        <div className="admin-gallery-content">
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Loading events...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {

@@ -41,22 +41,22 @@ const IntroVideo = () => {
       });
       
       // Redirect to home page after transition
-      setTimeout(navigateToHome, 1500); // Reduced from 2000ms
+      setTimeout(navigateToHome, 800); // Reduced from 1500ms
     };
 
     const handleTimeUpdate = () => {
-      // Start transition at exactly 5 seconds
-      if (video.currentTime >= 4.8) { // Start slightly before 5s for smooth transition
+      // Start transition at 3 seconds instead of 5 (faster)
+      if (video.currentTime >= 2.8) { // Start slightly before 3s for smooth transition
         setIsTransitioning(true);
-        setTimeout(navigateToHome, 1500);
+        setTimeout(navigateToHome, 800); // Reduced from 1500ms
       }
     };
 
     const handleVideoError = (error) => {
       console.warn('Video loading error:', error);
       setShowFallback(true);
-      // Auto-redirect after 2 seconds if no video (reduced from 3s)
-      setTimeout(navigateToHome, 2000);
+      // Auto-redirect after 1.5 seconds if no video (reduced from 2s)
+      setTimeout(navigateToHome, 1500);
     };
 
     const handleVideoLoad = () => {
@@ -81,14 +81,14 @@ const IntroVideo = () => {
       video.addEventListener('loadeddata', handleVideoLoad);
       video.addEventListener('canplay', handleCanPlay);
       
-      // Set a timeout for video loading (reduced from 5s to 3s)
+      // Set a timeout for video loading (reduced from 3s to 2s)
       loadingTimeoutRef.current = setTimeout(() => {
         if (!videoLoaded) {
           console.warn('Video loading timeout - showing fallback');
           setShowFallback(true);
-          setTimeout(navigateToHome, 2000);
+          setTimeout(navigateToHome, 1500);
         }
-      }, 3000);
+      }, 2000);
       
       // Auto-play the video with better error handling
       const playPromise = video.play();
@@ -96,7 +96,7 @@ const IntroVideo = () => {
         playPromise.catch((error) => {
           console.warn('Video autoplay failed:', error);
           setShowFallback(true);
-          setTimeout(navigateToHome, 2000);
+          setTimeout(navigateToHome, 1500);
         });
       }
 
@@ -117,7 +117,7 @@ const IntroVideo = () => {
     } else {
       // If no video element, show fallback and redirect
       setShowFallback(true);
-      setTimeout(navigateToHome, 2000);
+      setTimeout(navigateToHome, 1500);
     }
   }, [navigateToHome, videoLoaded]);
 
