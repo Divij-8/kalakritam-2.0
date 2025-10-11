@@ -54,6 +54,14 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Art at your party - Service page -->
+  <url>
+    <loc>https://kalakritam.in/artparty</loc>
+    <lastmod>2025-10-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Contact - Important page -->
   <url>
     <loc>https://kalakritam.in/contact</loc>

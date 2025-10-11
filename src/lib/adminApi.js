@@ -341,6 +341,49 @@ export const blogsApi = {
   },
 };
 
+// Images (General Media) API functions
+export const imagesApi = {
+  getAll: () => apiCall('admin/images'),
+  create: async (imageItem) => apiCall('admin/images', 'POST', imageItem),
+  update: async (id, imageItem) => {
+    // If there's an old image and a new one, delete the old one in R2
+    if (imageItem.oldImageUrl && imageItem.imageUrl && imageItem.oldImageUrl !== imageItem.imageUrl) {
+      try {
+        await uploadApi.deleteImage(imageItem.oldImageUrl);
+        console.log('✅ Old image asset deleted successfully');
+      } catch (error) {
+        console.warn('⚠️ Failed to delete old image asset:', error);
+      }
+      const { oldImageUrl, ...updateData } = imageItem;
+      return apiCall(`admin/images/${id}`, 'PUT', updateData);
+    }
+    return apiCall(`admin/images/${id}`, 'PUT', imageItem);
+  },
+  delete: async (id) => {
+    try {
+      // Fetch current to find image URL
+      const list = await imagesApi.getAll();
+      const found = list.data?.find(item => item.id === id);
+      const result = await apiCall(`admin/images/${id}`, 'DELETE');
+      if (result.success && found) {
+        const imageUrl = found.imageUrl || found.image_url || found.url;
+        if (imageUrl) {
+          try {
+            await uploadApi.deleteImage(imageUrl);
+            console.log('✅ Image asset deleted from R2 successfully');
+          } catch (imgErr) {
+            console.warn('⚠️ Failed to delete image asset from R2:', imgErr);
+          }
+        }
+      }
+      return result;
+    } catch (error) {
+      console.error('❌ Failed to delete image asset:', error);
+      throw error;
+    }
+  },
+};
+
 // Contacts API functions (consolidated and fixed)
 export const contactsApi = {
   getAll: () => apiCall('admin/contacts'),
@@ -352,7 +395,7 @@ export const contactsApi = {
 
 // Upload API functions
 export const uploadApi = {
-  uploadImage: async (file, folder = 'general') => {
+  uploadImage: async (file, folder = 'general', name = undefined) => {
     try {
       const token = localStorage.getItem('adminToken');
       
@@ -381,6 +424,9 @@ export const uploadApi = {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('folder', folder); // Add folder parameter
+      if (name && typeof name === 'string') {
+        formData.append('name', name);
+      }
       
       const response = await fetch(`${config.apiBaseUrl}/upload/image`, {
         method: 'POST',

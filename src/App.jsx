@@ -83,6 +83,14 @@ const ArtBlogs = React.lazy(() => {
   });
 });
 
+const ArtParty = React.lazy(() => {
+  const measure = measureLazyLoadTime('ArtParty');
+  return import('./components/ArtParty').then(module => {
+    measure();
+    return module;
+  });
+});
+
 const AdminLogin = React.lazy(() => {
   const measure = measureLazyLoadTime('AdminLogin');
   return import('./components/AdminLogin').then(module => {
@@ -155,6 +163,14 @@ const AdminTickets = React.lazy(() => {
   });
 });
 
+const AdminArtPartyImages = React.lazy(() => {
+  const measure = measureLazyLoadTime('AdminArtPartyImages');
+  return import('./components/AdminArtPartyImages').then(module => {
+    measure();
+    return module;
+  });
+});
+
 const ToastDemo = React.lazy(() => {
   const measure = measureLazyLoadTime('ToastDemo');
   return import('./components/ToastDemo').then(module => {
@@ -221,8 +237,14 @@ if (typeof window !== 'undefined') {
         case '/artblogs':
           preloadComponent(() => import('./components/ArtBlogs'));
           break;
+        case '/artparty':
+          preloadComponent(() => import('./components/ArtParty'));
+          break;
           case '/contact':
             preloadComponent(() => import('./components/Contact'));
+            break;
+          case '/admin/artpartyimages':
+            preloadComponent(() => import('./components/AdminArtPartyImages'));
             break;
         }
         preloadTimeouts.delete(href);
@@ -355,6 +377,7 @@ const AppContent = () => {
                   <Route path="/about" element={<About />} />
                   <Route path="/events" element={<Events />} />
                   <Route path="/artblogs" element={<ArtBlogs />} />
+                  <Route path="/artparty" element={<ArtParty />} />
                   
                   {/* Demo Routes (for development/testing) */}
                   <Route path="/toast-demo" element={<ToastDemo />} />
@@ -369,6 +392,7 @@ const AppContent = () => {
                   <Route path="/admin/blogs" element={<AdminBlogs />} />
                   <Route path="/admin/contact" element={<AdminContact />} />
                   <Route path="/admin/tickets" element={<AdminTickets />} />
+                  <Route path="/admin/artpartyimages" element={<AdminArtPartyImages />} />
                   
                   {/* Public Ticket Verification Routes */}
                   <Route path="/verify-ticket/:ticketId" element={<TicketVerification />} />

@@ -51,6 +51,7 @@ const Footer = () => {
           <ul className="footer-links">
             <li><button onClick={() => navigateWithLoading('/events')} className="footer-nav-btn">Events</button></li>
             <li><button onClick={() => navigateWithLoading('/artblogs')} className="footer-nav-btn">Art Blogs</button></li>
+            <li><button onClick={() => navigateWithLoading('/artparty')} className="footer-nav-btn">Art at your party</button></li>
           </ul>
         </div>
         

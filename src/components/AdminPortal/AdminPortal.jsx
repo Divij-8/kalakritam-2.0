@@ -38,7 +38,7 @@ const AdminPortal = () => {
         events: eventsRes.status === 'fulfilled' ? (eventsRes.value?.data?.length || 0) : 0,
         artists: artistsRes.status === 'fulfilled' ? (artistsRes.value?.data?.length || 0) : 0
       };
-
+      path: '/admin/artpartyimages',
       setStats(newStats);
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
@@ -97,6 +97,14 @@ const AdminPortal = () => {
       path: '/admin/tickets',
       icon: '🎫',
       color: '#c38f21'
+    }
+    ,
+    {
+      title: 'ArtParty Images',
+      description: 'Upload and manage banners for the ArtParty page',
+  path: '/admin/artpartyimages',
+      icon: '🖼️',
+      color: '#d4af85'
     }
   ];
 
