@@ -29,27 +29,40 @@ const ArtParty = () => {
     }
   }, []);
 
-  // Fetch public ArtParty images for the banner
+  // Using native lazy loading within banner images
+
+  // Fetch public ArtParty images for the banner (use ALL images, handle pagination)
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
         const publicApi = new ApiClient(config.apiBaseUrl);
-        const res = await publicApi.get('/artparty/images?featured=true');
-        if (!cancelled && res?.data?.success) {
-          let urls = (res.data.data || [])
-            .map((item) => item.image_url)
-            .filter(Boolean);
-          // If no featured images, fallback to all artparty images
-          if (urls.length === 0) {
-            const resAll = await publicApi.get('/artparty/images');
-            if (resAll?.data?.success) {
-              urls = (resAll.data.data || [])
-                .map((item) => item.image_url)
-                .filter(Boolean);
+        // Try a high limit first
+        const first = await publicApi.get('/artparty/images?limit=1000&page=1');
+        let records = [];
+        if (first?.data?.success) {
+          const payload = first.data;
+          records = Array.isArray(payload.data) ? payload.data : [];
+
+          // If paginated, fetch remaining pages
+          const pagination = payload.pagination;
+          if (pagination && pagination.totalPages && pagination.totalPages > 1) {
+            const totalPages = pagination.totalPages;
+            for (let page = 2; page <= totalPages; page++) {
+              const res = await publicApi.get(`/artparty/images?limit=${pagination.limit || 1000}&page=${page}`);
+              if (res?.data?.success && Array.isArray(res.data.data)) {
+                records = records.concat(res.data.data);
+              }
             }
           }
-          setBannerImages(urls);
+        }
+
+        if (!cancelled) {
+          const allUrls = (records || [])
+            .map((item) => item?.image_url || item?.imageUrl)
+            .filter(Boolean);
+          const uniqueUrls = Array.from(new Set(allUrls));
+          if (!cancelled) setBannerImages(uniqueUrls);
         }
       } catch (e) {
         // silent fallback to placeholders
@@ -94,7 +107,7 @@ const ArtParty = () => {
               '/images/twitter-card.jpg'
             ]}
             height="300px"
-            speedSec={15}
+            speedSec={50}
             gap="1px"
           />
         </div>
