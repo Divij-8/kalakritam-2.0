@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { useNavigationWithLoading } from '../../hooks/useNavigationWithLoading';
 import { useUsernameValidation } from '../ValidateUsername/ValidateUsername';
+import { useUserAuth } from '../../contexts/UserAuthContext';
 import { toast } from '../../utils/notifications.js';
 import { useMobileOptimizations } from '../../hooks/useMobileOptimizations';
 import { getMobileBlurConfig } from '../../utils/mobileOptimizations';
@@ -13,10 +15,10 @@ import './Events.css';
 
 const Events = () => {
   const { navigateWithLoading } = useNavigationWithLoading();
+  const { username } = useParams();
+  const { user, isAuthenticated } = useUserAuth();
   useUsernameValidation('events'); // Validate username in URL
   const [selectedView, setSelectedView] = useState('upcoming');
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,6 +42,29 @@ const Events = () => {
     }
   }, []);
 
+  // Helper function to generate slug from title
+  const generateSlug = (title) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  };
+
+  const handleViewDetails = (event) => {
+    const slug = event.slug || generateSlug(event.title);
+    
+    // If user is authenticated and has username in URL, use personalized path
+    let eventPath;
+    if (username && isAuthenticated && user) {
+      eventPath = `/u/${username}/events/${slug}`;
+    } else {
+      eventPath = `/events/${slug}`;
+    }
+    
+    // Navigate to slug-based URL
+    navigateWithLoading(eventPath);
+  };
+
   const fetchEvents = async (page = 1, append = false) => {
     try {
       if (append) {
@@ -55,10 +80,25 @@ const Events = () => {
       toast.dismiss(loadingId);
       
       if (data.success) {
-        // Transform image URLs to handle localhost URLs like gallery
+        // Transform database fields to camelCase and handle URLs
         const transformedData = data.data.map(event => ({
-          ...event,
-          imageUrl: config.transformImageUrl(event.image_url || event.imageUrl)
+          id: event.id,
+          title: event.title,
+          slug: event.slug,
+          description: event.description,
+          category: event.category,
+          venue: event.venue,
+          startDate: event.start_date,
+          endDate: event.end_date,
+          ticketPrice: event.ticket_price,
+          maxAttendees: event.max_attendees,
+          imageUrl: config.transformImageUrl(event.image_url || event.imageUrl),
+          videoUrl: event.video_url || event.videoUrl,
+          districtUrl: event.district_url || event.districtUrl,
+          bookMyShowUrl: event.book_my_show_url || event.bookMyShowUrl,
+          active: event.active,
+          createdAt: event.created_at,
+          updatedAt: event.updated_at
         }));
         
         if (append) {
@@ -135,16 +175,6 @@ const Events = () => {
     ? events.filter(event => event.active) 
     : events;
 
-  const handleEventClick = (event) => {
-    setSelectedEvent(event);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedEvent(null);
-  };
-
   return (
     <div className="events-container">
       {/* Particles Background - Optimized for mobile */}
@@ -168,79 +198,149 @@ const Events = () => {
       
       <Header currentPage="events" />
       
-      <main className="events-content">
-        <section className="events-hero">
+      <div className="events-page-content">
+        <header className="events-page-header">
           <h1 className="events-title">Events</h1>
           <p className="events-subtitle">Discover Art Through Experiences</p>
-        </section>
-
-        <section className="events-filter">
-          <div className="filter-buttons">
-            <button
-              className={`filter-btn ${selectedView === 'upcoming' ? 'active' : ''}`}
-              onClick={() => setSelectedView('upcoming')}
-            >
-              Upcoming Events
-            </button>
+          <div className="events-description">
+            <p>Immerse yourself in our vibrant art events and cultural experiences. Connect with artists, explore creative workshops, and be part of the thriving art community at Kalakritam.</p>
           </div>
-        </section>
+        </header>
 
-        {selectedView === 'upcoming' && (
-          <section className="upcoming-events">
-            <div className="events-grid">
-              {filteredEvents.map(event => (
-                <div key={event.id} className="event-card" onClick={() => handleEventClick(event)}>
-                  <div className="event-poster">
-                    <img 
-                      src={event.imageUrl || '/events/art poster.png'} 
-                      alt={event.title}
-                      className="poster-image"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
-                      }}
-                    />
-                    <div className="poster-placeholder" style={{ display: 'none' }}>
-                      <div className="kalakritam-logo-text">Kalakritam</div>
-                      <div className="event-type">Event Poster</div>
+        <main className="events-content">
+          <div className="events-count">
+            <p>Showing {filteredEvents.length} event{filteredEvents.length !== 1 ? 's' : ''}</p>
+          </div>
+          
+          <div className="events-grid">
+            {filteredEvents.map(event => (
+              <div key={event.id} className="event-card universal-card flip-card" onClick={() => handleViewDetails(event)}>
+                <div className="flip-card-inner">
+                  {/* Front Side - Image and Event Info */}
+                  <div className="flip-card-front">
+                    <div className="event-image-container universal-card-image-container">
+                      <img 
+                        src={event.imageUrl || '/events/art poster.png'} 
+                        alt={event.title}
+                        className="event-image universal-card-image"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          const placeholder = e.target.parentNode.querySelector('.event-image-placeholder');
+                          if (placeholder) {
+                            placeholder.style.display = 'flex';
+                          }
+                        }}
+                      />
+                      <div className="event-image-placeholder universal-card-image-placeholder" style={{ display: 'none' }}>
+                        <div className="universal-card-logo-text">Kalakritam</div>
+                        <div className="universal-card-image-not-available">Image not available</div>
+                      </div>
+                      <div className="event-overlay universal-card-overlay">
+                        <div className="event-overlay-content universal-card-overlay-content">
+                          <h3>{event.title}</h3>
+                          <p>{event.startDate ? new Date(event.startDate).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric',
+                            year: 'numeric'
+                          }) : 'TBA'}</p>
+                          <span className="highlight-text">₹{event.ticketPrice || '0'}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="event-date-badge">
-                      {new Date(event.startDate).toLocaleDateString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric' 
-                      })}
+                    
+                    <div className="event-info universal-card-content">
+                      <h4 className="event-title universal-card-title">{event.title}</h4>
+                      <p className="event-venue universal-card-subtitle">{event.venue}</p>
+                      <p className="event-description universal-card-description">{event.description}</p>
+                      
+                      <div className="event-details universal-card-details">
+                        <div className="detail-row universal-card-detail-row">
+                          <span className="detail-label universal-card-detail-label">Date:</span>
+                          <span className="detail-value universal-card-detail-value">
+                            {event.startDate ? new Date(event.startDate).toLocaleDateString('en-US', { 
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric'
+                            }) : 'TBA'}
+                          </span>
+                        </div>
+                        <div className="detail-row universal-card-detail-row">
+                          <span className="detail-label universal-card-detail-label">Time:</span>
+                          <span className="detail-value universal-card-detail-value">
+                            {event.startDate ? new Date(event.startDate).toLocaleTimeString('en-US', { 
+                              hour: 'numeric', 
+                              minute: '2-digit', 
+                              hour12: true 
+                            }) : 'TBA'}
+                          </span>
+                        </div>
+                        <div className="detail-row universal-card-detail-row">
+                          <span className="detail-label universal-card-detail-label">Location:</span>
+                          <span className="detail-value universal-card-detail-value">{event.venue || 'TBA'}</span>
+                        </div>
+                        <div className="detail-row universal-card-detail-row">
+                          <span className="detail-label universal-card-detail-label">Max Attendees:</span>
+                          <span className="detail-value universal-card-detail-value">{event.maxAttendees || 'No limit'}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="event-actions universal-card-actions">
+                        <button 
+                          className="btn-details universal-card-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleViewDetails(event);
+                          }}
+                        >
+                          View Details
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <div className="event-content">
-                    <h3 className="event-title">{event.title}</h3>
-                    <div className="event-quick-details">
-                      <div className="event-time">
-                        <strong>Time:</strong> {new Date(event.startDate).toLocaleTimeString('en-US', { 
-                          hour: 'numeric', 
-                          minute: '2-digit', 
-                          hour12: true 
-                        })}
-                      </div>
-                      <div className="event-location">
-                        <strong>Location:</strong> {event.venue}
-                      </div>
-                      <div className="event-price">
-                        <strong>Price:</strong> ₹{event.ticketPrice}
+                  
+                  {/* Back Side - Video Only */}
+                  {event.videoUrl && (
+                    <div className="flip-card-back">
+                      <div className="event-video-container">
+                        <video 
+                          className="event-video"
+                          src={event.videoUrl}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          preload="metadata"
+                          onError={(e) => {
+                            console.error('Video failed to load:', event.videoUrl);
+                            e.target.style.display = 'none';
+                            const fallback = e.target.parentNode.querySelector('.video-fallback');
+                            if (fallback) fallback.style.display = 'flex';
+                          }}
+                        />
+                        <div className="video-fallback" style={{ display: 'none' }}>
+                          <div className="universal-card-logo-text">Kalakritam</div>
+                          <div className="universal-card-image-not-available">Video unavailable</div>
+                        </div>
                       </div>
                     </div>
-                    <p className="event-description">{event.description}</p>
-                    <div className="event-actions">
-                      <button className="view-details-btn">View Details</button>
-                      <button className="register-btn">Register Now</button>
-                    </div>
-                  </div>
+                  )}
                 </div>
-              ))}
+              </div>
+            ))}
+          </div>
+
+          {filteredEvents.length === 0 && (
+            <div className="no-results">
+              <div className="no-results-content">
+                <h3>No events found</h3>
+                <p>Check back soon for upcoming art events and cultural experiences.</p>
+              </div>
             </div>
-            
-            {/* Load More Button */}
-            {currentPage < totalPages && (
-              <div className="load-more-container" style={{ 
+          )}
+          
+          {/* Load More Button */}
+          {currentPage < totalPages && (
+            <div className="load-more-container" style={{ 
                 textAlign: 'center', 
                 margin: '4rem 0 3rem 0',
                 display: 'flex',
@@ -300,110 +400,26 @@ const Events = () => {
                     fontWeight: '500',
                     opacity: 0.8
                   }}>
-                    Showing {events.length} of {totalItems} events • Page {currentPage} of {totalPages}
-                  </div>
-                )}
-              </div>
-            )}
-          </section>
-        )}
-
-        {/* Event Detail Modal */}
-        {isModalOpen && selectedEvent && (
-          <div className="event-modal-overlay" onClick={closeModal}>
-            <div className="event-modal" onClick={(e) => e.stopPropagation()}>
-              <button className="modal-close-btn" onClick={closeModal}>
-                <div className="close-icon-circle">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                  </svg>
+                  Showing {events.length} of {totalItems} events • Page {currentPage} of {totalPages}
                 </div>
-              </button>
-              
-              <div className="modal-content">
-                <div className="modal-poster-section">
-                  <img 
-                    src={selectedEvent.imageUrl} 
-                    alt={selectedEvent.title}
-                    className="modal-poster-image"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'flex';
-                    }}
-                  />
-                  <div className="poster-placeholder" style={{ display: 'none' }}>
-                    <div className="kalakritam-logo-text">Kalakritam</div>
-                    <div className="event-type">Event Poster</div>
-                  </div>
-                </div>
-
-                <div className="modal-details-section">
-                  <div className="modal-header">
-                    <h2 className="modal-title">{selectedEvent.title}</h2>
-                    <div className="modal-price-section">
-                      <span className="price-label">Price</span>
-                      <div className="modal-price">₹{selectedEvent.ticketPrice}</div>
-                    </div>
-                  </div>
-
-                  <div className="modal-description">
-                    <h3>About This Event</h3>
-                    <p>{selectedEvent.description}</p>
-                  </div>
-
-                  <div className="modal-specifications">
-                    <h3>Event Details</h3>
-                    <div className="spec-grid">
-                      <div className="spec-item">
-                        <span className="spec-label">Date</span>
-                        <span className="spec-value">{new Date(selectedEvent.startDate).toLocaleDateString('en-US', { 
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}</span>
-                      </div>
-                      <div className="spec-item">
-                        <span className="spec-label">Start Time</span>
-                        <span className="spec-value">{new Date(selectedEvent.startDate).toLocaleTimeString('en-US', { 
-                          hour: 'numeric', 
-                          minute: '2-digit', 
-                          hour12: true 
-                        })}</span>
-                      </div>
-                      <div className="spec-item">
-                        <span className="spec-label">End Time</span>
-                        <span className="spec-value">{new Date(selectedEvent.endDate).toLocaleTimeString('en-US', { 
-                          hour: 'numeric', 
-                          minute: '2-digit', 
-                          hour12: true 
-                        })}</span>
-                      </div>
-                      <div className="spec-item">
-                        <span className="spec-label">Location</span>
-                        <span className="spec-value">{selectedEvent.venue}</span>
-                      </div>
-                      <div className="spec-item">
-                        <span className="spec-label">Max Attendees</span>
-                        <span className="spec-value">{selectedEvent.maxAttendees}</span>
-                      </div>
-                      <div className="spec-item">
-                        <span className="spec-label">Current Attendees</span>
-                        <span className="spec-value">{selectedEvent.currentAttendees}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="modal-actions">
-                    <button className="register-modal-btn">Register Now</button>
-                    <button className="share-btn">Share Event</button>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
+          )}
+        </main>
+
+        <section className="events-info">
+          <div className="info-content">
+            <h2>Art Events & Cultural Experiences in Hyderabad</h2>
+            <p>
+              Join <strong>Kalakritam's vibrant art events in Hyderabad</strong> where creativity meets community. 
+              Our events showcase traditional Indian art forms, contemporary expressions, and provide opportunities 
+              to connect with artists and art enthusiasts. Experience art workshops, exhibitions, cultural gatherings, 
+              and creative sessions in inspiring venues across Hyderabad. Each event is designed to foster artistic 
+              growth, cultural appreciation, and community building through the power of art.
+            </p>
           </div>
-        )}
-      </main>
+        </section>
+      </div>
       
       <Footer />
     </div>

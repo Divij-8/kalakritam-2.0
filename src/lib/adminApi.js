@@ -139,6 +139,34 @@ const transformWorkshopFromDB = (workshop) => {
   };
 };
 
+// Transform event data from snake_case (database) to camelCase (frontend)
+const transformEventFromDB = (event) => {
+  if (!event) return null;
+  return {
+    id: event.id,
+    title: event.title,
+    description: event.description,
+    category: event.category,
+    startDate: event.start_date,
+    endDate: event.end_date,
+    venue: event.venue,
+    ticketPrice: event.ticket_price,
+    maxAttendees: event.max_attendees,
+    imageUrl: event.image_url,
+    videoUrl: event.video_url,
+    active: event.active,
+    slug: event.slug,
+    metaTitle: event.meta_title,
+    metaDescription: event.meta_description,
+    metaKeywords: event.meta_keywords,
+    ogTitle: event.og_title,
+    ogDescription: event.og_description,
+    ogImage: event.og_image,
+    createdAt: event.created_at,
+    updatedAt: event.updated_at
+  };
+};
+
 // Workshops API functions
 export const workshopsApi = {
   getAll: async ({ page = 1, limit = 1000 } = {}) => {
@@ -210,9 +238,29 @@ export const workshopsApi = {
 
 // Events API functions
 export const eventsApi = {
-  getAll: ({ page = 1, limit = 1000 } = {}) => {
+  getAll: async ({ page = 1, limit = 1000 } = {}) => {
     const params = new URLSearchParams({ page: String(page), limit: String(limit) });
-    return apiCall(`admin/events?${params.toString()}`);
+    const response = await apiCall(`admin/events?${params.toString()}`);
+    
+    console.log('🔍 Raw API response before transformation:', {
+      success: response.success,
+      firstEventRaw: response.data?.[0],
+      hasVideoUrl: !!response.data?.[0]?.video_url,
+      hasCategory: !!response.data?.[0]?.category
+    });
+    
+    // Transform the data from snake_case to camelCase
+    if (response.success && response.data) {
+      response.data = response.data.map(transformEventFromDB);
+      
+      console.log('🔄 After transformation:', {
+        firstEventTransformed: response.data?.[0],
+        hasVideoUrl: !!response.data?.[0]?.videoUrl,
+        hasCategory: !!response.data?.[0]?.category
+      });
+    }
+    
+    return response;
   },
   addEvent: (event) => apiCall('admin/events', 'POST', event),
   updateEvent: async (id, event) => {
@@ -507,6 +555,72 @@ export const uploadApi = {
       return result;
     } catch (error) {
       console.error('❌ Image upload error:', error);
+      throw error;
+    }
+  },
+
+  uploadVideo: async (file, folder = 'videos', name = undefined) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+      
+      // Validate file
+      if (!file.type.startsWith('video/')) {
+        throw new Error('Please select a valid video file');
+      }
+      
+      // Check file size (50MB limit for videos to match backend)
+      if (file.size > 50 * 1024 * 1024) {
+        throw new Error('Video file size must be less than 50MB');
+      }
+      
+      console.log('🎬 Starting video upload:', {
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type,
+        folder: folder,
+        endpoint: `${config.apiBaseUrl}/upload/image`  // Using /upload/image which supports videos
+      });
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', folder);
+      if (name && typeof name === 'string') {
+        formData.append('name', name);
+      }
+      
+      const response = await fetch(`${config.apiBaseUrl}/upload/image`, {  // Using /upload/image
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      
+      const result = await response.json();
+      
+      console.log('📤 Video upload response received:', {
+        status: response.status,
+        result
+      });
+      
+      if (!response.ok) {
+        throw new Error(result.message || 'Video upload failed');
+      }
+      
+      // Validate the response structure
+      if (result.success && result.data && result.data.url) {
+        console.log('✅ Video uploaded successfully to R2:', result.data.url);
+      } else {
+        console.warn('⚠️ Unexpected response structure:', result);
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('❌ Video upload error:', error);
       throw error;
     }
   },

@@ -14794,9 +14794,9 @@ var setupEventsRoutes = /* @__PURE__ */ __name2((app2) => {
       const countResult = await db.query(countQuery, params);
       const total = countResult.success ? parseInt(countResult.data[0]?.total || 0) : 0;
       const query = `
-        SELECT id, title, description, start_date, end_date, venue, 
-               ticket_price, max_attendees, current_attendees, image_url, 
-               featured, active, slug, created_at, updated_at
+        SELECT id, title, description, category, start_date, end_date, venue, 
+               ticket_price, max_attendees, current_attendees, image_url, video_url, 
+               district_url, book_my_show_url, featured, active, slug, created_at, updated_at
         FROM events 
         ${whereClause}
         ORDER BY featured DESC, start_date ASC 
@@ -16651,8 +16651,8 @@ var setupAdminRoutes = /* @__PURE__ */ __name2((app2) => {
       const offset = (page - 1) * limit;
       params.push(limit, offset);
       const query = `
-        SELECT id, title, description, start_date, end_date, venue, ticket_price, 
-               max_attendees, current_attendees, image_url, featured, active,
+        SELECT id, title, description, category, start_date, end_date, venue, ticket_price, 
+               max_attendees, current_attendees, image_url, video_url, district_url, book_my_show_url, featured, active,
                meta_title, meta_description, meta_keywords, slug, og_title, 
                og_description, og_image, created_at, updated_at
         FROM events 
@@ -16689,17 +16689,18 @@ var setupAdminRoutes = /* @__PURE__ */ __name2((app2) => {
       const now = (/* @__PURE__ */ new Date()).toISOString();
       const query = `
         INSERT INTO events (
-          id, title, description, start_date, end_date, venue, ticket_price,
-          max_attendees, current_attendees, image_url, featured, active,
+          id, title, description, category, start_date, end_date, venue, ticket_price,
+          max_attendees, current_attendees, image_url, video_url, district_url, book_my_show_url, featured, active,
           meta_title, meta_description, meta_keywords, slug, og_title,
           og_description, og_image, created_at, updated_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)
         RETURNING *
       `;
       const result = await db.query(query, [
         id,
         eventData.title,
         eventData.description || null,
+        eventData.category || null,
         eventData.start_date || null,
         eventData.end_date || null,
         eventData.venue || null,
@@ -16707,6 +16708,9 @@ var setupAdminRoutes = /* @__PURE__ */ __name2((app2) => {
         eventData.max_attendees || null,
         eventData.current_attendees || 0,
         eventData.image_url || null,
+        eventData.video_url || null,
+        eventData.district_url || null,
+        eventData.book_my_show_url || null,
         eventData.featured || false,
         eventData.active !== false,
         eventData.meta_title || null,
@@ -16744,11 +16748,11 @@ var setupAdminRoutes = /* @__PURE__ */ __name2((app2) => {
       const now = (/* @__PURE__ */ new Date()).toISOString();
       const query = `
         UPDATE events SET
-          title = $2, description = $3, start_date = $4, end_date = $5, venue = $6,
-          ticket_price = $7, max_attendees = $8, current_attendees = $9, image_url = $10,
-          featured = $11, active = $12, meta_title = $13, meta_description = $14,
-          meta_keywords = $15, slug = $16, og_title = $17, og_description = $18,
-          og_image = $19, updated_at = $20
+          title = $2, description = $3, category = $4, start_date = $5, end_date = $6, venue = $7,
+          ticket_price = $8, max_attendees = $9, current_attendees = $10, image_url = $11, video_url = $12,
+          district_url = $13, book_my_show_url = $14, featured = $15, active = $16, meta_title = $17, meta_description = $18,
+          meta_keywords = $19, slug = $20, og_title = $21, og_description = $22,
+          og_image = $23, updated_at = $24
         WHERE id = $1
         RETURNING *
       `;
@@ -16756,6 +16760,7 @@ var setupAdminRoutes = /* @__PURE__ */ __name2((app2) => {
         id,
         eventData.title,
         eventData.description || null,
+        eventData.category || null,
         eventData.start_date || null,
         eventData.end_date || null,
         eventData.venue || null,
@@ -16763,6 +16768,9 @@ var setupAdminRoutes = /* @__PURE__ */ __name2((app2) => {
         eventData.max_attendees || null,
         eventData.current_attendees || 0,
         eventData.image_url || null,
+        eventData.video_url || null,
+        eventData.district_url || null,
+        eventData.book_my_show_url || null,
         eventData.featured || false,
         eventData.active !== false,
         eventData.meta_title || null,

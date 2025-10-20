@@ -1,0 +1,662 @@
+/* Import mobile optimizations */
+@import '../../mobile-optimizations.css';
+
+/* Event Detail Container - Matching Gallery/Workshop Theme */
+.event-detail-container {
+  min-height: 100vh;
+  background-color: #000000;
+  color: white;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Particles Background - Matching Gallery */
+.event-detail-particles-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Blur Overlay Layer - Matching Gallery */
+.event-detail-blur-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.event-detail-container.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.event-detail-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(1rem, 4vw, 2rem);
+  padding-top: 140px;
+  padding-bottom: 4rem;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+/* Event Layout */
+.event-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.event-left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.event-image-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.event-detail-image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px -10px rgba(195, 143, 33, 0.4);
+  object-fit: cover;
+  background: #111;
+  border: 2px solid rgba(195, 143, 33, 0.2);
+}
+
+/* Image Placeholder - Matching Gallery */
+.event-image-placeholder {
+  width: 100%;
+  min-height: 400px;
+  background: linear-gradient(135deg, #002f2f 0%, #003838 100%);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(195, 143, 33, 0.3);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.kalakritam-logo-text {
+  font-family: 'Samarkan', 'Cinzel', serif;
+  font-size: 2.5rem;
+  color: #c38f21;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.image-not-available {
+  color: #d4af85;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.image-meta-badges {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #c38f21;
+  border-radius: 20px;
+  color: #c38f21;
+  font-weight: 600;
+}
+
+.badge.active {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+/* Event Info Panel */
+.event-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.event-header-with-booking {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.event-detail-title {
+  font-family: 'Samarkan', 'Cinzel', serif;
+  font-size: clamp(2rem, 6vw, 3rem);
+  color: #c38f21;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: clamp(1px, 0.5vw, 2px);
+  line-height: 1.2;
+  font-weight: 600;
+  flex: 1;
+}
+
+.booking-logo-buttons {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.booking-logo-btn {
+  width: 50px;
+  height: 50px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(195, 143, 33, 0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(195, 143, 33, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.booking-logo-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(195, 143, 33, 0.4);
+  border-color: #c38f21;
+  background: rgba(255, 255, 255, 1);
+}
+
+.booking-logo-btn svg,
+.booking-logo-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.event-detail-venue {
+  font-size: 1.3rem;
+  color: #d4af85;
+  font-weight: 300;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.6;
+}
+
+.event-detail-price {
+  color: #c38f21;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 2rem;
+  padding: 0.8rem 1.5rem;
+  background: rgba(195, 143, 33, 0.1);
+  border: 1px solid rgba(195, 143, 33, 0.3);
+  border-radius: 25px;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+}
+
+/* Booking Buttons */
+.booking-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  border: 2px solid rgba(195, 143, 33, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.booking-btn {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.booking-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.booking-btn:hover::before {
+  left: 100%;
+}
+
+.booking-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(1.2);
+  transition: transform 0.3s ease;
+}
+
+.booking-btn:hover .booking-logo {
+  transform: scale(1.1);
+}
+
+.booking-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.booking-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+.booking-platform {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.district-btn {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.district-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(195, 143, 33, 0.4);
+  border-color: rgba(195, 143, 33, 0.6);
+  background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+}
+
+.bookmyshow-btn {
+  background: linear-gradient(135deg, #c4122f 0%, #e52d3d 100%);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(196, 18, 47, 0.3);
+}
+
+.bookmyshow-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(196, 18, 47, 0.5);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, #e52d3d 0%, #c4122f 100%);
+}
+
+/* About This Event Section */
+.event-about-section {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(145deg, #003333 0%, #004040 100%);
+  border-radius: 15px;
+  border: 1px solid rgba(195, 143, 33, 0.2);
+}
+
+.event-about-section h3 {
+  color: #c38f21;
+  font-size: 1.5rem;
+  margin: 0 0 1.5rem;
+  font-family: 'Samarkan', 'Cinzel', serif;
+  font-weight: 600;
+  text-align: center;
+}
+
+.event-detail-description {
+  line-height: 1.7;
+  color: #cccccc;
+  font-size: 1rem;
+  margin: 0;
+  text-align: center;
+}
+
+/* Specifications */
+.event-detail-specifications {
+  margin-bottom: 2rem;
+}
+
+.event-detail-specifications h3 {
+  color: #c38f21;
+  font-size: 1.5rem;
+  margin: 0 0 1.5rem;
+  font-family: 'Samarkan', 'Cinzel', serif;
+  font-weight: 600;
+  text-align: center;
+}
+
+.event-specs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.spec-item {
+  font-size: 0.95rem;
+  background: rgba(195, 143, 33, 0.1);
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(195, 143, 33, 0.3);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.spec-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.spec-item:hover {
+  background: rgba(195, 143, 33, 0.15);
+  border-color: rgba(195, 143, 33, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(195, 143, 33, 0.2);
+}
+
+.spec-item .label {
+  color: #c38f21;
+  font-weight: 600;
+  margin-right: 1rem;
+}
+
+.spec-item .value {
+  color: #d4af85;
+  font-weight: 500;
+}
+
+/* Additional Info Cards */
+.event-additional-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.info-card {
+  background: linear-gradient(145deg, #003333 0%, #004040 100%);
+  padding: 1.5rem;
+  border: 1px solid rgba(195, 143, 33, 0.2);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(195, 143, 33, 0.4);
+  box-shadow: 0 6px 20px rgba(195, 143, 33, 0.2);
+}
+
+.info-card h4 {
+  color: #c38f21;
+  font-size: 1.2rem;
+  margin: 0 0 1rem;
+  font-family: 'Samarkan', 'Cinzel', serif;
+  font-weight: 600;
+}
+
+.info-card p {
+  color: #cccccc;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Actions - Matching Gallery View Details Button */
+.event-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(195, 143, 33, 0.2);
+  justify-content: center;
+}
+
+/* Back button uses universal-card-btn classes; only add layout tweaks if needed */
+.back-button, .back-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Enhanced Themed Animated Button (optional upgrade layer) */
+.themed-animated-btn {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(135deg,#c38f21 0%,#d4af85 50%,#c38f21 100%);
+  background-size: 250% 250%;
+  animation: btnGradientShift 6s ease-in-out infinite;
+  box-shadow: 0 0 0 0 rgba(195,143,33,0.4), 0 4px 18px rgba(195,143,33,0.35);
+}
+
+/* Glow ring using ::after */
+.themed-animated-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(130deg, rgba(195,143,33,0.8), rgba(212,175,133,0.4), rgba(195,143,33,0.8));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity .5s ease;
+  z-index: -1;
+}
+
+.themed-animated-btn:hover::after, .themed-animated-btn:focus-visible::after {
+  opacity: 1;
+}
+
+.themed-animated-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,47,47,0.6), 0 0 0 5px rgba(195,143,33,0.5);
+}
+
+.themed-animated-btn:hover {
+  transform: translateY(-3px) scale(1.015);
+  box-shadow: 0 8px 28px -4px rgba(195,143,33,0.5), 0 0 18px -2px rgba(195,143,33,0.4);
+}
+
+.themed-animated-btn:active {
+  transform: translateY(0) scale(.99);
+  box-shadow: 0 4px 15px rgba(195,143,33,0.3);
+}
+
+.themed-animated-btn::before {
+  mix-blend-mode: normal;
+}
+
+.themed-animated-btn,
+.themed-animated-btn:hover,
+.themed-animated-btn:focus-visible,
+.themed-animated-btn:active {
+  color: #002f2f !important;
+}
+
+@keyframes btnGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .themed-animated-btn { animation: none; background-size: 100% 100%; }
+  .themed-animated-btn:hover { transform: translateY(-2px); }
+}
+
+/* Loading & Error States */
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 1.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(195, 143, 33, 0.2);
+  border-top-color: #c38f21;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-state h2 {
+  color: #c38f21;
+  font-size: 2rem;
+  font-family: 'Samarkan', 'Cinzel', serif;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+.error-state p {
+  color: #d4af85;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.loading-state p {
+  color: #d4af85;
+  font-size: 1.1rem;
+  font-weight: 300;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .event-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .event-detail-content {
+    padding-top: 120px;
+  }
+
+  .event-detail-title {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .event-detail-content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .event-detail-title {
+    font-size: 1.5rem;
+  }
+
+  .event-detail-price {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .kalakritam-logo-text {
+    font-size: 2rem;
+  }
+  
+  /* Booking logo buttons responsive */
+  .event-header-with-booking {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .booking-logo-buttons {
+    align-self: flex-end;
+  }
+  
+  .booking-logo-btn {
+    width: 45px;
+    height: 45px;
+    padding: 6px;
+  }
+  
+  /* Booking buttons responsive */
+  .booking-buttons {
+    padding: 1rem;
+  }
+  
+  .booking-btn {
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+  }
+  
+  .booking-logo {
+    height: 32px;
+  }
+  
+  .booking-platform {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-button,
+  .back-link {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+  }
+}

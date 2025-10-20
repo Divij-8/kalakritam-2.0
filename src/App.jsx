@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import RequireAuth from './components/RequireAuth'
 import GuestOnly from './components/GuestOnly'
 import { LoadingProvider, useLoading } from './contexts/LoadingContext.jsx'
@@ -11,6 +11,7 @@ import Particles from './components/Particles'
 import { measureLazyLoadTime } from './hooks/usePerformanceTracking'
 import { seoManager } from './utils/seoManager.js'
 import useServerConnection from './hooks/useServerConnection.js'
+import { toast } from './utils/notifications.js'
 import './App.css'
 import ScrollToTop from './components/ScrollToTop.jsx'
 
@@ -82,6 +83,14 @@ const About = React.lazy(() => {
 const Events = React.lazy(() => {
   const measure = measureLazyLoadTime('Events');
   return import('./components/Events').then(module => {
+    measure();
+    return module;
+  });
+});
+
+const EventDetail = React.lazy(() => {
+  const measure = measureLazyLoadTime('EventDetail');
+  return import('./components/EventDetail').then(module => {
     measure();
     return module;
   });
@@ -393,6 +402,30 @@ class LazyLoadingErrorBoundary extends React.Component {
   }
 }
 
+// Component to handle notifications inside Router context
+const EventNotificationHandler = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const notificationTimer = setTimeout(() => {
+      toast.info('🎉 Register for our upcoming events!', {
+        description: 'Click here to explore exciting events',
+        duration: 8000, // Show for 8 seconds
+        clickable: true,
+        dismissOnClick: true,
+        onClick: () => {
+          navigate('/events');
+        },
+        icon: '🎨'
+      });
+    }, 5000); // 5 seconds delay
+
+    return () => clearTimeout(notificationTimer);
+  }, [navigate]);
+
+  return null;
+};
+
 const AppContent = () => {
   const { isLoading } = useLoading();
 
@@ -419,6 +452,7 @@ const AppContent = () => {
       {isLoading && <Loading />}
       <GlobalToastContainer />
       <Router>
+        <EventNotificationHandler />
         <div className="app">
           <div className="app-particles-background">
             <Particles
@@ -449,6 +483,7 @@ const AppContent = () => {
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/events" element={<Events />} />
+                  <Route path="/events/:slug" element={<EventDetail />} />
                   <Route path="/artblogs" element={<ArtBlogs />} />
                   <Route path="/artparty" element={<ArtParty />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
@@ -490,6 +525,7 @@ const AppContent = () => {
                   <Route path="/u/:username/contact" element={<RequireAuth><Contact /></RequireAuth>} />
                   <Route path="/u/:username/about" element={<RequireAuth><About /></RequireAuth>} />
                   <Route path="/u/:username/events" element={<RequireAuth><Events /></RequireAuth>} />
+                  <Route path="/u/:username/events/:slug" element={<RequireAuth><EventDetail /></RequireAuth>} />
                   <Route path="/u/:username/artblogs" element={<RequireAuth><ArtBlogs /></RequireAuth>} />
                   <Route path="/u/:username/artists" element={<RequireAuth><Artists /></RequireAuth>} />
                   <Route path="/u/:username/artparty" element={<RequireAuth><ArtParty /></RequireAuth>} />

@@ -1,0 +1,110 @@
+/* Video Upload Component Styles */
+.video-upload-container {
+  width: 100%;
+}
+
+.video-upload-label {
+  display: block;
+  color: #e5e7eb;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.video-upload-area {
+  width: 100%;
+}
+
+.video-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(195, 143, 33, 0.2);
+}
+
+.preview-video {
+  width: 100%;
+  border-radius: 8px;
+  background: #000;
+}
+
+.video-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.change-video-btn,
+.remove-video-btn {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.change-video-btn {
+  background: linear-gradient(135deg, #c38f21 0%, #d4af85 100%);
+  color: #1a1a1a;
+}
+
+.change-video-btn:hover {
+  background: linear-gradient(135deg, #d4a124 0%, #e0b798 100%);
+  transform: translateY(-1px);
+}
+
+.remove-video-btn {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.remove-video-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 2px dashed rgba(195, 143, 33, 0.3);
+  border-radius: 8px;
+  background: rgba(0, 51, 51, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upload-placeholder:hover {
+  border-color: rgba(195, 143, 33, 0.5);
+  background: rgba(0, 51, 51, 0.2);
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.upload-text {
+  color: #e5e7eb;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0 0 0.25rem 0;
+}
+
+.upload-subtext {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.file-input-hidden {
+  display: none;
+}

@@ -22,6 +22,16 @@ const NotificationItem = ({ notification, onRemove }) => {
     }, 300);
   };
 
+  const handleClick = () => {
+    if (notification.clickable && notification.onClick) {
+      notification.onClick();
+      // Optionally remove the notification after clicking
+      if (notification.dismissOnClick !== false) {
+        handleRemove();
+      }
+    }
+  };
+
   const getIcon = () => {
     // If custom icon is provided, use it
     if (notification.icon) {
@@ -38,9 +48,11 @@ const NotificationItem = ({ notification, onRemove }) => {
     <div
       className={`notification ${notification.type} ${
         isVisible && !isRemoving ? 'show' : 'hide'
-      }`}
+      } ${notification.clickable ? 'clickable' : ''}`}
       role="alert"
       aria-live="polite"
+      onClick={handleClick}
+      style={{ cursor: notification.clickable ? 'pointer' : 'default' }}
     >
       <div className="notification-icon">
         {getIcon()}

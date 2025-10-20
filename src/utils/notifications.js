@@ -42,6 +42,8 @@ class NotificationManager {
       position: NOTIFICATION_POSITIONS.TOP_RIGHT,
       duration: 5000,
       dismissible: true,
+      clickable: false,
+      onClick: null,
       ...notification
     };
 
