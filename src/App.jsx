@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import RequireAuth from './components/RequireAuth'
 import GuestOnly from './components/GuestOnly'
 import { LoadingProvider, useLoading } from './contexts/LoadingContext.jsx'
@@ -12,6 +12,7 @@ import { measureLazyLoadTime } from './hooks/usePerformanceTracking'
 import { seoManager } from './utils/seoManager.js'
 import useServerConnection from './hooks/useServerConnection.js'
 import { toast } from './utils/notifications.js'
+import { updateSpeculationRules } from './utils/pageOptimizationScript.js'
 import './App.css'
 import ScrollToTop from './components/ScrollToTop.jsx'
 
@@ -426,6 +427,17 @@ const EventNotificationHandler = () => {
   return null;
 };
 
+// Component to handle page optimizations like speculation rules
+const PageOptimizer = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    updateSpeculationRules();
+  }, [location.pathname]);
+
+  return null;
+};
+
 const AppContent = () => {
   const { isLoading } = useLoading();
 
@@ -453,6 +465,7 @@ const AppContent = () => {
       <GlobalToastContainer />
       <Router>
         <EventNotificationHandler />
+        <PageOptimizer />
         <div className="app">
           <div className="app-particles-background">
             <Particles
