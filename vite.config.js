@@ -18,15 +18,24 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
+      external: [],
       output: {
         format: 'es',
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
+        inlineDynamicImports: false,
+        // Ensure proper globals for React
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM'
+        },
         manualChunks: (id) => {
           // Better chunk splitting strategy
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+            // Bundle React, ReactDOM and all React-dependent libraries together
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') || 
+                id.includes('@mui') || id.includes('@emotion') || id.includes('scheduler')) {
               return 'react-vendor';
             }
             if (id.includes('three') || id.includes('@react-three') || id.includes('ogl')) {
@@ -35,7 +44,6 @@ export default defineConfig({
             if (id.includes('gsap')) {
               return 'animation-vendor';
             }
-            // Keep MUI with main vendor to avoid circular dependency issues
             return 'vendor';
           }
           // Split admin components into separate chunk
