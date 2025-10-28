@@ -93,15 +93,16 @@ const UserLogin = () => {
             // Clear previous button
             buttonContainer.innerHTML = '';
             
-            // Render the button with fixed width
+            // Render the button with website theme
             window.google.accounts.id.renderButton(
               buttonContainer,
               {
-                theme: 'filled_black',
+                theme: 'outline',
                 size: 'large',
                 text: isSignUp ? 'signup_with' : 'signin_with',
-                width: '400',
+                width: '380',
                 logo_alignment: 'left',
+                shape: 'rectangular',
               }
             );
           }
