@@ -186,7 +186,7 @@
 
 .form-input {
   width: 100%;
-  padding: 1rem 3rem 1rem 3.25rem;
+  padding: 1rem 3rem 1rem 3.5rem;
   font-size: 1rem;
   color: #ffffff;
   background: rgba(0, 47, 47, 0.6);
@@ -198,6 +198,7 @@
   text-transform: none;
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
 }
 
 .form-input:focus {
@@ -481,6 +482,24 @@ input#email {
   transform: none;
 }
 
+/* Additional specificity for user login form */
+.user-login-card .form-group .input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.user-login-card .form-group .input-wrapper .input-icon {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.user-login-card .form-group .input-wrapper .form-input {
+  width: 100%;
+  padding-left: 3.5rem !important;
+  box-sizing: border-box;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .user-login-container {
@@ -540,7 +559,7 @@ input#email {
   }
   
   .form-input {
-    padding: 0.8rem 2.5rem 0.8rem 2.75rem;
+    padding: 0.8rem 2.5rem 0.8rem 3rem !important;
     font-size: 0.9rem;
   }
   
@@ -672,7 +691,7 @@ input#email {
   }
   
   .form-input {
-    padding: 0.7rem 2.25rem 0.7rem 2.5rem;
+    padding: 0.7rem 2.25rem 0.7rem 2.75rem !important;
     font-size: 0.875rem;
   }
   
@@ -790,7 +809,7 @@ input#email {
   }
   
   .form-input {
-    padding: 0.65rem 2rem 0.65rem 2.35rem;
+    padding: 0.65rem 2rem 0.65rem 2.6rem !important;
     font-size: 0.825rem;
   }
   
@@ -858,7 +877,7 @@ input#email {
   }
   
   .form-input {
-    padding: 0.6rem 2.25rem 0.6rem 2.5rem;
+    padding: 0.6rem 2.25rem 0.6rem 2.75rem !important;
     font-size: 0.85rem;
   }
   

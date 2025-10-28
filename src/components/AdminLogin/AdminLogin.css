@@ -153,6 +153,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .input-icon {
@@ -161,11 +162,13 @@
   color: #d4af85;
   opacity: 0.7;
   z-index: 2;
+  pointer-events: none;
+  flex-shrink: 0;
 }
 
 .form-input {
   width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
+  padding: 1rem 1rem 1rem 3.25rem;
   font-size: 1rem;
   color: #ffffff;
   background: rgba(0, 47, 47, 0.6);
@@ -181,6 +184,7 @@
   font-variant: normal;
   font-feature-settings: normal;
   -webkit-font-feature-settings: normal;
+  box-sizing: border-box;
 }
 
 .form-input:focus {
@@ -404,6 +408,25 @@ input#email::placeholder {
   transform: none;
 }
 
+/* Additional specificity for admin login form */
+.admin-login-card .form-group .input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.admin-login-card .form-group .input-wrapper .input-icon {
+  position: absolute;
+  left: 1rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.admin-login-card .form-group .input-wrapper .form-input {
+  width: 100%;
+  padding-left: 3.25rem !important;
+  box-sizing: border-box;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .admin-login-container {
@@ -424,7 +447,7 @@ input#email::placeholder {
   }
   
   .form-input {
-    padding: 0.875rem 0.875rem 0.875rem 2.75rem;
+    padding: 0.875rem 0.875rem 0.875rem 3rem !important;
   }
   
   .input-icon {
@@ -457,6 +480,21 @@ input#email::placeholder {
   
   .admin-description {
     font-size: 0.9rem;
+  }
+  
+  .form-input {
+    padding: 0.875rem 0.875rem 0.875rem 3rem !important;
+    font-size: 0.95rem;
+  }
+  
+  .input-icon {
+    left: 0.875rem;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .password-toggle {
+    right: 0.875rem;
   }
 }
 
