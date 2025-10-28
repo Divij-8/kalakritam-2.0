@@ -77,14 +77,15 @@ export const UserAuthProvider = ({ children }) => {
             return;
           }
 
-          // Verify token is still valid (but don't logout immediately on failure)
+          // Verify token is still valid
           console.log('UserAuthContext - Verifying token...');
           try {
             const result = await userAuthApi.verifyToken();
             if (!result.success) {
               console.warn('Token verification returned unsuccessful:', result);
-              // Don't logout immediately - user might have just logged in
-              // The token might be valid but the API might have issues
+              // If user was deleted or token is invalid, clear everything
+              console.log('UserAuthContext - Logging out due to invalid token');
+              logout();
             } else {
               console.log('UserAuthContext - Token verified successfully');
               // Update user data if API returns it
@@ -95,13 +96,9 @@ export const UserAuthProvider = ({ children }) => {
             }
           } catch (error) {
             console.error('Token verification failed:', error);
-            // Only logout if it's a 401 (unauthorized), not 403 or 500
-            if (error.message && error.message.includes('401')) {
-              console.log('UserAuthContext - Logging out due to 401');
-              logout();
-            } else {
-              console.warn('Token verification error - keeping user logged in for now');
-            }
+            // Logout on any verification error to ensure deleted accounts are cleared
+            console.log('UserAuthContext - Logging out due to verification error');
+            logout();
           }
         } catch (parseError) {
           console.error('Failed to parse stored user data:', parseError);
@@ -109,6 +106,7 @@ export const UserAuthProvider = ({ children }) => {
           localStorage.removeItem('userData');
           localStorage.removeItem('userToken');
           localStorage.removeItem('loginTime');
+          localStorage.removeItem('lastActivity');
           setIsLoading(false);
         }
       } else {
@@ -117,11 +115,20 @@ export const UserAuthProvider = ({ children }) => {
         if (storedUser === 'undefined' || storedUser === 'null') {
           localStorage.removeItem('userData');
         }
+        if (storedToken) {
+          localStorage.removeItem('userToken');
+        }
+        localStorage.removeItem('loginTime');
+        localStorage.removeItem('lastActivity');
         setIsLoading(false);
       }
     } catch (error) {
       console.error('Auth check error:', error);
-      // Don't logout on general errors
+      // Clear everything on error
+      localStorage.removeItem('userData');
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('loginTime');
+      localStorage.removeItem('lastActivity');
       setIsLoading(false);
     }
   };
