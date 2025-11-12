@@ -1,5 +1,5 @@
 # Robots.txt for Kalakritam - Art Workshops Platform
-# Updated: October 22, 2025
+# Updated: November 12, 2025
 
 # Allow all search engines
 User-agent: *
@@ -8,18 +8,16 @@ Allow: /
 # Sitemap location
 Sitemap: https://kalakritam.in/sitemap.xml
 
-# Allow main public pages
+# Ensure main pages are explicitly allowed (no redirect issues)
 Allow: /home
 Allow: /about
 Allow: /workshops
-Allow: /workshops/
 Allow: /gallery
-Allow: /gallery/
 Allow: /artists
 Allow: /events
-Allow: /events/
 Allow: /artblogs
 Allow: /artparty
+Allow: /moments
 Allow: /contact
 Allow: /privacy
 Allow: /terms

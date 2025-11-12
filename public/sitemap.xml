@@ -110,6 +110,14 @@
     <priority>0.2</priority>
   </url>
 
+  <!-- User Authentication Pages (Low priority, noindex via meta tags) -->
+  <url>
+    <loc>https://kalakritam.in/user/login</loc>
+    <lastmod>2025-11-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.1</priority>
+  </url>
+
   <!-- Note: Dynamic pages (individual artworks, workshops, events) should be added via:
        1. Server-side sitemap generation, or
        2. Dynamic sitemap.xml endpoint that fetches current items from database
@@ -121,6 +129,9 @@
        
        These URLs use canonical tags to consolidate SEO signals from user-specific paths
        like /u/{username}/gallery/{slug} to the canonical /gallery/{slug} URL.
+       
+       IMPORTANT: All main pages should be directly accessible without redirects.
+       Avoid redirect chains for better indexing.
   -->
 
 </urlset>
