@@ -685,7 +685,7 @@ const AdminFinancials = () => {
                       labelStyle: { fill: palette.text, fontSize: 13 }
                     }
                   }}
-                series={[
+                  series={[
                   { 
                     data: eventChartData.income,
                     label: 'Income',
