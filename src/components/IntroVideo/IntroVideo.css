@@ -10,12 +10,12 @@
   justify-content: center;
   flex-direction: column;
   z-index: 1000;
-  transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .intro-video-container.transitioning {
-  background-color: transparent;
-  opacity: 0.8;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .video-wrapper {

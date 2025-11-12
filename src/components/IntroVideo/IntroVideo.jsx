@@ -12,6 +12,14 @@ const IntroVideo = () => {
   const [videoLoaded, setVideoLoaded] = useState(false);
   const loadingTimeoutRef = useRef(null);
 
+  // Preload Home component
+  useEffect(() => {
+    // Preload Home component in the background
+    import('../Home').catch(error => {
+      console.warn('Failed to preload Home component:', error);
+    });
+  }, []);
+
   // Memoized navigation function
   const navigateToHome = useCallback(() => {
     try {
@@ -33,6 +41,7 @@ const IntroVideo = () => {
     const handleVideoEnd = () => {
       // Start transition animation
       setIsTransitioning(true);
+      sessionStorage.setItem('videoTransitioning', 'true');
       
       // Show welcome toast
       toast.success('Welcome to Kalakritam!', {
@@ -45,9 +54,10 @@ const IntroVideo = () => {
     };
 
     const handleTimeUpdate = () => {
-      // Start transition at exactly 5 seconds
-      if (video.currentTime >= 4.8) { // Start slightly before 5s for smooth transition
+      // Start transition at exactly 2 seconds
+      if (video.currentTime >= 1.9) { // Start slightly before 2s for smooth transition
         setIsTransitioning(true);
+        sessionStorage.setItem('videoTransitioning', 'true');
         setTimeout(navigateToHome, 1500);
       }
     };
@@ -56,6 +66,7 @@ const IntroVideo = () => {
       console.warn('Video loading error:', error);
       // Start transition animation even on error
       setIsTransitioning(true);
+      sessionStorage.setItem('videoTransitioning', 'true');
       setShowFallback(true);
       // Auto-redirect after showing animation
       setTimeout(navigateToHome, 1500);

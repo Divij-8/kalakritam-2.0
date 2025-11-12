@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import RequireAuth from './components/RequireAuth'
 import GuestOnly from './components/GuestOnly'
@@ -357,19 +357,17 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// Lazy loading fallback component
+// Lazy loading fallback component - minimal loader without text
 const LazyLoadingFallback = () => (
   <div style={{
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     height: '100vh',
-    background: '#000000',
-    color: '#c38f21',
-    fontSize: '1.2rem',
-    fontFamily: 'Samarkan, serif'
+    background: '#002f2f',
+    color: '#c38f21'
   }}>
-    Loading Kalakritam...
+    {/* No loading text - just blank screen matching intro video background */}
   </div>
 )
 
@@ -462,6 +460,9 @@ const PageOptimizer = () => {
 
 const AppContent = () => {
   const { isLoading } = useLoading();
+  const [showParticles, setShowParticles] = useState(false);
+  const [homeBlurred, setHomeBlurred] = useState(true);
+  const [showHome, setShowHome] = useState(false);
 
   // Initialize server connection monitoring
   const serverConnection = useServerConnection({
@@ -481,6 +482,59 @@ const AppContent = () => {
     }
   });
 
+  // Check if video has been completed
+  useEffect(() => {
+    const videoCompleted = sessionStorage.getItem('videoCompleted');
+    const isTransitioning = sessionStorage.getItem('videoTransitioning');
+    
+    if (videoCompleted === 'true') {
+      setShowParticles(true);
+      setHomeBlurred(false);
+      setShowHome(true);
+    } else if (isTransitioning === 'true') {
+      // During transition, show home but keep it blurred
+      setShowHome(true);
+      setHomeBlurred(true);
+    }
+
+    // Listen for storage changes (when video completes)
+    const handleStorageChange = () => {
+      const videoCompleted = sessionStorage.getItem('videoCompleted');
+      const isTransitioning = sessionStorage.getItem('videoTransitioning');
+      
+      if (videoCompleted === 'true') {
+        setShowParticles(true);
+        setHomeBlurred(false);
+        setShowHome(true);
+      } else if (isTransitioning === 'true') {
+        setShowHome(true);
+        setHomeBlurred(true);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also check on route changes
+    const checkInterval = setInterval(() => {
+      const videoCompleted = sessionStorage.getItem('videoCompleted');
+      const isTransitioning = sessionStorage.getItem('videoTransitioning');
+      
+      if (videoCompleted === 'true' && !showParticles) {
+        setShowParticles(true);
+        setHomeBlurred(false);
+        setShowHome(true);
+      } else if (isTransitioning === 'true' && !showHome) {
+        setShowHome(true);
+        setHomeBlurred(true);
+      }
+    }, 100);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(checkInterval);
+    };
+  }, [showParticles, showHome]);
+
   return (
     <>
       {isLoading && <Loading />}
@@ -489,19 +543,44 @@ const AppContent = () => {
         <EventNotificationHandler />
         <PageOptimizer />
         <div className="app">
-          <div className="app-particles-background">
-            <Particles
-              particleColors={['#c38f21', '#ffffff', '#c38f21']}
-              particleCount={1000}
-              particleSpread={10}
-              speed={0.2}
-              particleBaseSize={200}
-              moveParticlesOnHover={true}
-              particleHoverFactor={2}
-              alphaParticles={true}
-              disableRotation={false}
-            />
-          </div>
+          {showParticles && (
+            <div className="app-particles-background">
+              <Particles
+                particleColors={['#c38f21', '#ffffff', '#c38f21']}
+                particleCount={1000}
+                particleSpread={10}
+                speed={0.2}
+                particleBaseSize={200}
+                moveParticlesOnHover={true}
+                particleHoverFactor={2}
+                alphaParticles={true}
+                disableRotation={false}
+              />
+            </div>
+          )}
+          
+          {/* Background Home page during intro video - with blur effect */}
+          {showHome && (
+            <div 
+              className="app-background-home" 
+              style={{
+                filter: homeBlurred ? 'blur(20px)' : 'blur(0px)',
+                opacity: homeBlurred ? 0.3 : 1,
+                transition: 'filter 1.5s ease-out, opacity 1.5s ease-out',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                zIndex: 5
+              }}
+            >
+              <Suspense fallback={null}>
+                <Home />
+              </Suspense>
+            </div>
+          )}
+          
           <div className="app-content">
             <ScrollToTop behavior="auto" />
             <LazyLoadingErrorBoundary>
