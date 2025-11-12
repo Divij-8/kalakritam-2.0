@@ -680,12 +680,7 @@ const AdminFinancials = () => {
                     legend: {
                       direction: 'row',
                       position: { vertical: 'top', horizontal: 'middle' },
-                      padding: 0,
-                      itemMarkWidth: 15,
-                      itemMarkHeight: 15,
-                      markGap: 5,
-                      itemGap: 15,
-                      labelStyle: { fill: palette.text, fontSize: 13 }
+                      padding: 0
                     }
                   }}
                   series={[
