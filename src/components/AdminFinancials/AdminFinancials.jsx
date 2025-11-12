@@ -198,6 +198,15 @@ const AdminFinancials = () => {
   }, [records]);
 
   const eventChartData = useMemo(() => {
+    if (!sortedRecords || sortedRecords.length === 0) {
+      return {
+        labels: [],
+        income: [],
+        investment: [],
+        profit: [],
+        dates: []
+      };
+    }
     return {
       labels: sortedRecords.map(r => {
         const evt = events.find(e => e.id === r.event_id);
@@ -276,7 +285,7 @@ const AdminFinancials = () => {
             <Typography variant="h6" sx={{ color: palette.gold, mb: 3, fontWeight: 600 }}>
               ⚡ Event Profit Overview (By Date)
             </Typography>
-            {records.length === 0 ? (
+            {!sortedRecords || sortedRecords.length === 0 ? (
               <Box sx={{ textAlign: 'center', py: 4, color: palette.text }}>
                 <Typography>No event data available. Add financial records to see profit trends.</Typography>
               </Box>
