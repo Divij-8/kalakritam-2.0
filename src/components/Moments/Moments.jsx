@@ -23,6 +23,7 @@ const Moments = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const fetchCalled = useRef(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
   
   // Mobile optimization states
   const [isMobile, setIsMobile] = useState(shouldOptimizeForMobile());
@@ -30,10 +31,6 @@ const Moments = () => {
   const [blurConfig, setBlurConfig] = useState(getMobileBlurConfig());
   const [networkOptimizations, setNetworkOptimizations] = useState({});
   const [batteryOptimizations, setBatteryOptimizations] = useState({});
-
-  // Modal state for image viewing
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Initialize mobile optimizations
   useEffect(() => {
@@ -53,6 +50,8 @@ const Moments = () => {
     
     const handleResize = () => {
       const newIsMobile = shouldOptimizeForMobile();
+      setWindowWidth(window.innerWidth); // Update window width for column redistribution
+      
       if (newIsMobile !== isMobile) {
         setIsMobile(newIsMobile);
         setParticleConfig(getMobileParticleConfig());
@@ -128,23 +127,24 @@ const Moments = () => {
     }
   };
 
-  const handleImageClick = (imageUrl, eventName) => {
-    setSelectedImage({ url: imageUrl, title: eventName });
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedImage(null);
-  };
-
-  // Distribute photos of each event into 4 columns for masonry layout
+  // Distribute photos of each event into columns based on screen size
   const distributeEventPhotosToColumns = (photos, eventName) => {
-    // Create 4 columns
-    const columns = [[], [], [], []];
+    // Determine number of columns based on screen width (matching CSS breakpoints)
+    let numColumns = 4; // Desktop default (>1200px)
+    const screenWidth = window.innerWidth;
     
+    if (screenWidth <= 768) {
+      numColumns = 2; // Mobile and small tablets
+    } else if (screenWidth <= 1200) {
+      numColumns = 3; // Tablet
+    }
+    
+    // Create the appropriate number of columns
+    const columns = Array.from({ length: numColumns }, () => []);
+    
+    // Distribute photos across columns
     photos.forEach((photoUrl, index) => {
-      columns[index % 4].push({
+      columns[index % numColumns].push({
         url: photoUrl,
         eventName: eventName
       });
@@ -254,7 +254,6 @@ const Moments = () => {
                             <div 
                               key={`${moment.id}-${colIndex}-${photoIndex}`} 
                               className="masonry-item"
-                              onClick={() => handleImageClick(photo.url, photo.eventName)}
                             >
                               <LazyImage
                                 src={getOptimizedImageUrl(photo.url, isMobile)} 
@@ -303,17 +302,6 @@ const Moments = () => {
           </div>
         </section>
       </div>
-
-      {/* Image Modal */}
-      {isModalOpen && selectedImage && (
-        <div className="image-modal-overlay" onClick={closeModal}>
-          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close-btn" onClick={closeModal}>×</button>
-            <img src={selectedImage.url} alt={selectedImage.title} />
-            <p className="modal-event-name">{selectedImage.title}</p>
-          </div>
-        </div>
-      )}
       
       <Footer />
     </div>

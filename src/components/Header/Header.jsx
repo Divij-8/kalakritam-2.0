@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNavigationWithLoading } from '../../hooks/useNavigationWithLoading';
 import { useUserAuth } from '../../contexts/UserAuthContext';
 import { getUserPath, getNavigationPath } from '../../utils/userHelpers';
+import { gsap } from 'gsap';
 import './Header.css';
 import Artists from '../Artists';
 
@@ -13,19 +14,33 @@ const Header = ({ currentPage = 'home' }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showExploreMenu, setShowExploreMenu] = useState(false);
+  const [showInfoMenu, setShowInfoMenu] = useState(false);
   const mobileMenuRef = useRef(null);
   const userMenuRef = useRef(null);
+  const exploreMenuRef = useRef(null);
+  const infoMenuRef = useRef(null);
+  const exploreItemsRef = useRef([]);
+  const infoItemsRef = useRef([]);
+  const exploreTimelineRef = useRef(null);
+  const infoTimelineRef = useRef(null);
 
-  const navItems = [
-    { path: '/home', label: 'Home' },
+  const exploreItems = [
     { path: '/gallery', label: 'Gallery' },
     { path: '/workshops', label: 'Workshops' },
     { path: '/events', label: 'Events' },
     { path: '/artists', label: 'Artists' },
-    { path: '/moments', label: 'Moments' },
-    { path: '/artblogs', label: 'Art Blogs' },
+    { path: '/artblogs', label: 'Art Blogs' }
+  ];
+
+  const infoItems = [
     { path: '/contact', label: 'Contact' },
     { path: '/about', label: 'About Us' }
+  ];
+
+  const navItems = [
+    { path: '/home', label: 'Home' },
+    { path: '/moments', label: 'Moments' }
   ];
 
   // Check if device is mobile - more aggressive detection
@@ -94,6 +109,166 @@ const Header = ({ currentPage = 'home' }) => {
     }
   }, [isMobile]);
 
+  // Initialize GSAP animations for dropdown menus
+  useLayoutEffect(() => {
+    // Explore menu animation
+    if (showExploreMenu) {
+      const exploreDropdown = document.querySelector('.explore-menu-dropdown');
+      const validItems = exploreItemsRef.current.filter(item => item !== null);
+      
+      if (exploreDropdown && validItems.length > 0) {
+        // Kill any existing timeline
+        exploreTimelineRef.current?.kill();
+
+        // Create advanced timeline with custom ease
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        
+        // Dropdown container animation with scale and blur
+        tl.fromTo(exploreDropdown, 
+          { 
+            opacity: 0, 
+            y: -20, 
+            scale: 0.95,
+            filter: 'blur(10px)'
+          },
+          { 
+            opacity: 1, 
+            y: 0, 
+            scale: 1,
+            filter: 'blur(0px)',
+            duration: 0.4,
+            ease: 'expo.out'
+          }
+        );
+        
+        // Items staggered animation with rotation and slide
+        tl.fromTo(validItems,
+          { 
+            opacity: 0, 
+            y: 30,
+            x: -20,
+            rotateX: -15,
+            scale: 0.9
+          },
+          { 
+            opacity: 1, 
+            y: 0,
+            x: 0,
+            rotateX: 0,
+            scale: 1,
+            duration: 0.5,
+            stagger: {
+              each: 0.06,
+              ease: 'power2.out'
+            },
+            ease: 'back.out(1.2)'
+          },
+          '-=0.25'
+        );
+
+        // Add subtle float animation to bullets
+        validItems.forEach((item, index) => {
+          const bullet = item.querySelector('.dropdown-item-bullet');
+          if (bullet) {
+            tl.fromTo(bullet,
+              { scale: 0, rotation: -180 },
+              { 
+                scale: 1, 
+                rotation: 0,
+                duration: 0.4,
+                ease: 'elastic.out(1, 0.5)'
+              },
+              `-=${0.4 - (index * 0.06)}`
+            );
+          }
+        });
+        
+        exploreTimelineRef.current = tl;
+      }
+    }
+
+    // Info menu animation
+    if (showInfoMenu) {
+      const infoDropdown = document.querySelector('.info-menu-dropdown');
+      const validItems = infoItemsRef.current.filter(item => item !== null);
+      
+      if (infoDropdown && validItems.length > 0) {
+        // Kill any existing timeline
+        infoTimelineRef.current?.kill();
+
+        // Create advanced timeline with custom ease
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        
+        // Dropdown container animation with scale and blur
+        tl.fromTo(infoDropdown, 
+          { 
+            opacity: 0, 
+            y: -20, 
+            scale: 0.95,
+            filter: 'blur(10px)'
+          },
+          { 
+            opacity: 1, 
+            y: 0, 
+            scale: 1,
+            filter: 'blur(0px)',
+            duration: 0.4,
+            ease: 'expo.out'
+          }
+        );
+        
+        // Items staggered animation with rotation and slide
+        tl.fromTo(validItems,
+          { 
+            opacity: 0, 
+            y: 30,
+            x: -20,
+            rotateX: -15,
+            scale: 0.9
+          },
+          { 
+            opacity: 1, 
+            y: 0,
+            x: 0,
+            rotateX: 0,
+            scale: 1,
+            duration: 0.5,
+            stagger: {
+              each: 0.06,
+              ease: 'power2.out'
+            },
+            ease: 'back.out(1.2)'
+          },
+          '-=0.25'
+        );
+
+        // Add subtle float animation to bullets
+        validItems.forEach((item, index) => {
+          const bullet = item.querySelector('.dropdown-item-bullet');
+          if (bullet) {
+            tl.fromTo(bullet,
+              { scale: 0, rotation: -180 },
+              { 
+                scale: 1, 
+                rotation: 0,
+                duration: 0.4,
+                ease: 'elastic.out(1, 0.5)'
+              },
+              `-=${0.4 - (index * 0.06)}`
+            );
+          }
+        });
+        
+        infoTimelineRef.current = tl;
+      }
+    }
+
+    return () => {
+      exploreTimelineRef.current?.kill();
+      infoTimelineRef.current?.kill();
+    };
+  }, [showExploreMenu, showInfoMenu]);
+
   const handleNavigation = (path) => {
     // For dashboard path that already includes username, use it directly
     if (path.includes('/u/') || path === '/user/login' || path === '/admin/login') {
@@ -132,16 +307,33 @@ const Header = ({ currentPage = 'home' }) => {
           userMenuDropdown && !userMenuDropdown.contains(event.target)) {
         setShowUserMenu(false);
       }
+
+      // Close explore menu when clicking outside
+      const exploreMenuButton = exploreMenuRef.current;
+      const exploreMenuDropdown = document.querySelector('.explore-menu-dropdown');
+      
+      if (exploreMenuButton && !exploreMenuButton.contains(event.target) &&
+          exploreMenuDropdown && !exploreMenuDropdown.contains(event.target)) {
+        setShowExploreMenu(false);
+      }
+
+      // Close info menu when clicking outside
+      const infoMenuButton = infoMenuRef.current;
+      const infoMenuDropdown = document.querySelector('.info-menu-dropdown');
+      
+      if (infoMenuButton && !infoMenuButton.contains(event.target) &&
+          infoMenuDropdown && !infoMenuDropdown.contains(event.target)) {
+        setShowInfoMenu(false);
+      }
     };
 
-    if (isMobileMenuOpen || showUserMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    // Always attach listener
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isMobileMenuOpen, showUserMenu]);
+  }, []); // Empty dependency array - always active
 
   const handleLogout = () => {
     logout();
@@ -175,6 +367,86 @@ const Header = ({ currentPage = 'home' }) => {
                   {item.label}
                 </button>
               ))}
+
+              {/* Explore Dropdown Menu */}
+              <div className="header-dropdown-section" ref={exploreMenuRef}>
+                <button 
+                  className="nav-link dropdown-trigger"
+                  onClick={() => {
+                    setShowExploreMenu(!showExploreMenu);
+                    setShowInfoMenu(false);
+                    setShowUserMenu(false);
+                  }}
+                >
+                  Explore
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+
+                {showExploreMenu && (
+                  <div className="dropdown-menu explore-menu-dropdown">
+                    {exploreItems.map((item, index) => (
+                      <button 
+                        key={item.path}
+                        ref={el => exploreItemsRef.current[index] = el}
+                        className="dropdown-menu-item"
+                        onClick={() => {
+                          setShowExploreMenu(false);
+                          handleNavigation(item.path);
+                        }}
+                      >
+                        <span className="dropdown-item-bullet"></span>
+                        {item.label}
+                        <svg className="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Info Dropdown Menu */}
+              <div className="header-dropdown-section" ref={infoMenuRef}>
+                <button 
+                  className="nav-link dropdown-trigger"
+                  onClick={() => {
+                    setShowInfoMenu(!showInfoMenu);
+                    setShowExploreMenu(false);
+                    setShowUserMenu(false);
+                  }}
+                >
+                  Info
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+
+                {showInfoMenu && (
+                  <div className="dropdown-menu info-menu-dropdown">
+                    {infoItems.map((item, index) => (
+                      <button 
+                        key={item.path}
+                        ref={el => infoItemsRef.current[index] = el}
+                        className="dropdown-menu-item"
+                        onClick={() => {
+                          setShowInfoMenu(false);
+                          handleNavigation(item.path);
+                        }}
+                      >
+                        <span className="dropdown-item-bullet"></span>
+                        {item.label}
+                        <svg className="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               
               {/* User Login/Profile Button */}
               <div className="header-user-section" ref={userMenuRef}>
@@ -297,6 +569,32 @@ const Header = ({ currentPage = 'home' }) => {
                   className={`sidebar-nav-link ${currentPage === item.path.slice(1) ? 'active' : ''}`}
                 >
                   <span className="nav-icon">•</span>
+                  {item.label}
+                </button>
+              ))}
+
+              {/* Explore Section */}
+              <div className="sidebar-section-title">Explore</div>
+              {exploreItems.map((item) => (
+                <button 
+                  key={item.path}
+                  onClick={() => handleNavigation(item.path)} 
+                  className={`sidebar-nav-link ${currentPage === item.path.slice(1) ? 'active' : ''}`}
+                >
+                  <span className="nav-icon">→</span>
+                  {item.label}
+                </button>
+              ))}
+
+              {/* Info Section */}
+              <div className="sidebar-section-title">Info</div>
+              {infoItems.map((item) => (
+                <button 
+                  key={item.path}
+                  onClick={() => handleNavigation(item.path)} 
+                  className={`sidebar-nav-link ${currentPage === item.path.slice(1) ? 'active' : ''}`}
+                >
+                  <span className="nav-icon">→</span>
                   {item.label}
                 </button>
               ))}
