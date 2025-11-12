@@ -11,11 +11,7 @@ export default defineConfig({
         // Remove console.log in production
         ...(process.env.NODE_ENV === 'production' ? [['transform-remove-console', { exclude: ['error', 'warn'] }]] : [])
       ]
-    },
-    // Fast Refresh for better dev experience
-    fastRefresh: true,
-    // Enable JSX runtime optimization
-    jsxRuntime: 'automatic'
+    }
   })],
   define: {
     global: 'globalThis',
@@ -35,91 +31,55 @@ export default defineConfig({
           'react-dom': 'ReactDOM'
         },
         manualChunks: (id) => {
-          // Better chunk splitting strategy for smaller bundles
+          // Better chunk splitting strategy
           if (id.includes('node_modules')) {
-            // Core React bundle - keep small
-            if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler')) {
-              return 'react-core';
+            // Bundle React, ReactDOM and all React-dependent libraries together
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') || 
+                id.includes('@mui') || id.includes('@emotion') || id.includes('scheduler')) {
+              return 'react-vendor';
             }
-            // React ecosystem
-            if (id.includes('react-router')) {
-              return 'react-router';
-            }
-            // Material-UI - split into separate chunk
-            if (id.includes('@mui') || id.includes('@emotion')) {
-              return 'mui';
-            }
-            // Graphics libraries - defer loading
             if (id.includes('three') || id.includes('@react-three') || id.includes('ogl')) {
-              return 'graphics';
+              return 'graphics-vendor';
             }
-            // Animation library
             if (id.includes('gsap')) {
-              return 'gsap';
+              return 'animation-vendor';
             }
-            // Split large vendor libraries
-            if (id.includes('lodash') || id.includes('moment') || id.includes('date-fns')) {
-              return 'utils';
-            }
-            // React Toastify and notification libraries
-            if (id.includes('react-toastify') || id.includes('sonner')) {
-              return 'notifications';
-            }
-            // Other vendor code
             return 'vendor';
           }
-          // Split admin components into separate chunk (lazy loaded)
+          // Split admin components into separate chunk
           if (id.includes('/Admin')) {
             return 'admin';
-          }
-          // Split large components
-          if (id.includes('/components/Gallery') || id.includes('/components/Workshops')) {
-            return 'gallery-workshops';
           }
         }
       }
     },
     // Optimize chunk size
-    chunkSizeWarningLimit: 500,
+    chunkSizeWarningLimit: 1000,
     // Target modern browsers for better performance
     target: 'es2020',
     // Use esbuild for minification (faster)
     minify: 'esbuild',
-    // Disable source maps in production for smaller files
-    sourcemap: false,
+    // Enable source maps for debugging but smaller in production
+    sourcemap: process.env.NODE_ENV === 'development',
     // Optimize CSS
     cssMinify: true,
-    cssCodeSplit: true,
     // Preload modules
     modulePreload: {
       polyfill: true,
       resolveDependencies: (filename, deps, { hostId, hostType }) => {
-        // Ensure correct loading order to prevent initialization errors
-        // Load vendor and utils first, then react-core, then others
-        const criticalChunks = ['vendor', 'utils', 'notifications', 'react-core', 'react-router'];
-        
-        const sortedDeps = deps.sort((a, b) => {
-          const aIndex = criticalChunks.findIndex(chunk => a.includes(chunk));
-          const bIndex = criticalChunks.findIndex(chunk => b.includes(chunk));
-          
-          if (aIndex === -1 && bIndex === -1) return 0;
-          if (aIndex === -1) return 1;
-          if (bIndex === -1) return -1;
-          return aIndex - bIndex;
+        // Ensure react-vendor is loaded before other chunks
+        return deps.filter(dep => {
+          if (filename.includes('react-vendor')) return true;
+          if (dep.includes('react-vendor')) return true;
+          return true;
         });
-        
-        return sortedDeps;
       }
     },
     // Ensure proper module initialization order
     commonjsOptions: {
       include: [/node_modules/],
       transformMixedEsModules: true
-    },
-    // Enable compression
-    reportCompressedSize: true,
-    // Optimize assets
-    assetsInlineLimit: 4096
+    }
   },
   // Optimize dependencies
   optimizeDeps: {

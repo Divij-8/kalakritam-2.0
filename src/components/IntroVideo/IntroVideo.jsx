@@ -75,15 +75,11 @@ const IntroVideo = () => {
     const handleVideoLoad = () => {
       setVideoLoaded(true);
       performanceMonitor.measure('intro-video-load', 'intro-video-start');
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Video loaded successfully');
-      }
+      console.log('Video loaded successfully');
     };
 
     const handleCanPlay = () => {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Video can start playing');
-      }
+      console.log('Video can start playing');
       setVideoLoaded(true);
       if (loadingTimeoutRef.current) {
         clearTimeout(loadingTimeoutRef.current);
@@ -147,11 +143,6 @@ const IntroVideo = () => {
 
   return (
     <div className={`intro-video-container ${isTransitioning ? 'transitioning' : ''}`}>
-      {/* Hidden text for LCP detection */}
-      <h1 style={{ position: 'absolute', opacity: 0.01, fontSize: '1px', pointerEvents: 'none' }}>
-        Kalakritam - Art Workshops in Hyderabad
-      </h1>
-      
       {!showFallback ? (
         <div className={`video-wrapper ${isTransitioning ? 'transition-to-logo' : ''}`}>
           <video
@@ -162,11 +153,8 @@ const IntroVideo = () => {
             preload="auto"
             autoPlay={false}
             crossOrigin="anonymous"
-            aria-label="Kalakritam Introduction Video"
-            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Crect fill='%23002f2f' width='1920' height='1080'/%3E%3C/svg%3E"
           >
             <source src="/intro-video.mp4" type="video/mp4" />
-            <track kind="captions" srcLang="en" label="English" />
             <p>Your browser does not support the video tag.</p>
           </video>
         </div>
