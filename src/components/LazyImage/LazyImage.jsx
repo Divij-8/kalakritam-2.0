@@ -65,7 +65,7 @@ const LazyImage = ({
           onError={handleError}
           loading="lazy"
           decoding={isMobile ? "sync" : "async"}
-          fetchpriority={isMobile ? "low" : "auto"}
+          fetchPriority={isMobile ? "low" : "auto"}
         />
       )}
       

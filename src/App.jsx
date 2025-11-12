@@ -285,7 +285,13 @@ const AdminUsers = React.lazy(() => {
   });
 });
 
-
+const NotFound = React.lazy(() => {
+  const measure = measureLazyLoadTime('NotFound');
+  return import('./components/NotFound').then(module => {
+    measure();
+    return module;
+  });
+});
 
 // Preload commonly visited components for better UX
 const preloadComponent = (componentImport) => {
@@ -622,7 +628,7 @@ const AppContent = () => {
                   <Route path="/u/:username/artparty" element={<RequireAuth><ArtParty /></RequireAuth>} />
                   <Route path="/u/:username/moments" element={<RequireAuth><Moments /></RequireAuth>} />
                   
-                  <Route path="*" element={<Navigate to="/" replace />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
             </LazyLoadingErrorBoundary>
