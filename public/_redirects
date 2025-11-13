@@ -1,5 +1,10 @@
 # Cloudflare Pages Redirects for Kalakritam
-# Updated: November 12, 2025
+# Updated: November 13, 2025
+
+# Static assets - serve directly (no redirect)
+/assets/*  /assets/:splat  200
+/images/*  /images/:splat  200
+/fonts/*   /fonts/:splat   200
 
 # Remove trailing slashes for consistency (SEO best practice)
 /gallery/   /gallery   301
@@ -24,6 +29,6 @@
 /blogs          /artblogs   301
 /contact-us     /contact    301
 
-# SPA fallback - serve index.html for all routes (200 status, not redirect)
+# SPA fallback - serve index.html for all non-asset routes (200 status, not redirect)
 # This allows React Router to handle routing client-side
 /*    /index.html   200

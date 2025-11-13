@@ -15804,6 +15804,24 @@ var setupAdminRoutes = /* @__PURE__ */ __name2((app2) => {
       }, 500);
     }
   }));
+  app2.get("/admin/me", authenticateToken, catchAsync(async (c) => {
+    const user = c.get("user");
+    if (!user) {
+      return c.json({
+        success: false,
+        message: "User not found"
+      }, 401);
+    }
+    return c.json({
+      success: true,
+      user: {
+        id: user.id || user.userId,
+        email: user.email,
+        name: user.name,
+        role: user.role
+      }
+    });
+  }));
   app2.get("/admin/tickets", catchAsync(async (c) => {
     const db = createDatabase(c.env);
     const { page = 1, limit = 10, search, status, event_id } = c.req.query();
