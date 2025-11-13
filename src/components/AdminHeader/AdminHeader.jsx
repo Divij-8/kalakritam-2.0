@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AdminHeader.css';
 
 const AdminHeader = ({ currentPage = 'portal' }) => {
+  const navigate = useNavigate();
   const [showContentMenu, setShowContentMenu] = useState(false);
   const [showManageMenu, setShowManageMenu] = useState(false);
   const contentMenuRef = useRef(null);
@@ -11,14 +13,14 @@ const AdminHeader = ({ currentPage = 'portal' }) => {
     if (confirm('Are you sure you want to logout?')) {
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminUser');
-      window.location.href = '/admin/login';
+      navigate('/admin/login', { replace: true });
     }
   };
 
   const handleNavigation = (path) => {
     setShowContentMenu(false);
     setShowManageMenu(false);
-    window.location.href = path;
+    navigate(path);
   };
 
   // Content Management items
@@ -65,6 +67,12 @@ const AdminHeader = ({ currentPage = 'portal' }) => {
             <h1 className="admin-title">Kalakritam</h1>
             <div className="admin-subtitle">Content Management System</div>
           </div>
+        </div>
+        
+        <div className="admin-header-actions">
+          <button onClick={handleLogout} className="admin-logout-btn">
+            <span className="logout-text">Logout</span>
+          </button>
         </div>
         
         <nav className="admin-navigation">
@@ -145,12 +153,6 @@ const AdminHeader = ({ currentPage = 'portal' }) => {
                 </div>
               )}
             </div>
-          </div>
-          
-          <div className="admin-header-actions">
-            <button onClick={handleLogout} className="admin-logout-btn">
-              <span className="logout-text">Logout</span>
-            </button>
           </div>
         </nav>
       </div>

@@ -328,18 +328,30 @@
 }
 
 @media (max-width: 1024px) {
+  .admin-header-content {
+    gap: 1rem;
+  }
+  
   .admin-header-brand {
     min-width: 160px;
     margin-right: 1rem;
+    flex-shrink: 0;
+  }
+  
+  .admin-navigation {
+    flex: 1 1 auto;
+    min-width: 0;
   }
   
   .admin-nav-links {
     gap: 4px;
+    flex-wrap: wrap;
   }
   
   .admin-nav-link {
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
+    flex-shrink: 0;
   }
   
   .admin-dropdown-menu {
@@ -352,7 +364,12 @@
   }
   
   .admin-header-actions {
-    margin-left: 0.5rem;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  
+  .admin-logout-btn {
+    flex-shrink: 0;
   }
 }
 
@@ -361,11 +378,13 @@
     padding: 0.75rem 15px;
     min-height: 60px;
     flex-wrap: wrap;
+    gap: 10px;
   }
   
   .admin-header-brand {
     min-width: 140px;
     margin-right: 0.5rem;
+    flex-shrink: 0;
   }
   
   .admin-title {
@@ -383,15 +402,19 @@
   
   .admin-navigation {
     gap: 8px;
+    flex: 1 1 auto;
+    min-width: 0;
   }
   
   .admin-nav-links {
-    gap: 3px;
+    gap: 4px;
+    flex-wrap: wrap;
   }
   
   .admin-nav-link {
     padding: 0.5rem 0.75rem;
     font-size: 0.8rem;
+    flex-shrink: 0;
   }
   
   .admin-dropdown-menu {
@@ -408,62 +431,167 @@
   .admin-logout-btn {
     padding: 0.5rem 0.875rem;
     font-size: 0.8rem;
+    flex-shrink: 0;
   }
   
   .admin-header-actions {
-    margin-left: 0;
+    margin-left: auto;
+    flex-shrink: 0;
   }
 }
 
 @media (max-width: 480px) {
-  .admin-header-content {
-    flex-direction: column;
-    min-height: auto;
-    padding: 10px 12px;
-    gap: 10px;
+  .admin-header {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   }
   
+  .admin-header-content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-height: auto;
+    padding: 12px 14px;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  /* Top Row - Brand + Logout */
   .admin-header-brand {
-    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-right: 0;
+    min-width: 0;
+    gap: 8px;
+  }
+  
+  .admin-brand-info {
+    flex: 1;
+    min-width: 0;
   }
   
   .admin-title {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+    line-height: 1.2;
+  }
+  
+  .admin-subtitle {
+    font-size: 0.7rem;
+    margin-top: 2px;
+  }
+  
+  .admin-brand-badge {
+    font-size: 0.6rem;
+    padding: 3px 6px;
+    flex-shrink: 0;
+  }
+  
+  /* Logout Button - Next to Brand */
+  .admin-header-actions {
+    flex-shrink: 0;
+    margin-left: 0;
+  }
+  
+  .admin-logout-btn {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.75rem;
+    min-height: 38px;
+    white-space: nowrap;
+  }
+  
+  /* Navigation Section - Single Row */
+  .admin-navigation {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+    padding-top: 8px;
+    border-top: 1px solid rgba(195, 143, 33, 0.2);
+  }
+  
+  .admin-nav-links {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  
+  .admin-nav-links::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .admin-nav-link {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+    min-height: 38px;
+    text-align: center;
+    justify-content: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  .admin-dropdown-section {
+    position: relative;
+    flex-shrink: 0;
+  }
+  
+  .admin-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: auto;
+    transform: none;
+    min-width: 200px;
+    max-width: calc(100vw - 32px);
+    z-index: 99999;
+  }
+  
+  .admin-dropdown-item {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .admin-header-content {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .admin-title {
+    font-size: 1.2rem;
   }
   
   .admin-subtitle {
     font-size: 0.65rem;
   }
   
-  .admin-navigation {
-    width: 100%;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-  
-  .admin-nav-links {
-    flex: 1;
-    justify-content: flex-start;
-    gap: 4px;
-    flex-wrap: wrap;
-  }
-  
   .admin-nav-link {
-    padding: 0.5rem 0.875rem;
-    font-size: 0.75rem;
-  }
-  
-  .admin-dropdown-menu {
-    min-width: 160px;
-    max-width: 90vw;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.7rem;
+    min-height: 38px;
   }
   
   .admin-logout-btn {
-    padding: 0.5rem 0.875rem;
-    font-size: 0.75rem;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.7rem;
+    min-height: 38px;
   }
   
-  .admin-header-actions {
-    width: auto;
+  .admin-dropdown-menu {
+    min-width: 180px;
+  }
+  
+  .admin-dropdown-item {
+    padding: 0.65rem 0.8rem;
+    font-size: 0.75rem;
   }
 }
