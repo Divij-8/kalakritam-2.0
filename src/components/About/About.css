@@ -75,6 +75,26 @@
 
 .about-story {
   margin-bottom: 4rem;
+  position: relative;
+}
+
+.story-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.18;
+  z-index: 0;
+  border-radius: 15px;
+}
+
+.story-content-wrapper {
+  position: relative;
+  z-index: 1;
 }
 
 .story-content {
@@ -82,7 +102,6 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   padding: 3rem;
-  backdrop-filter: blur(10px);
 }
 
 .story-content h2 {
@@ -123,8 +142,28 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   padding: 2.5rem;
-  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
   transition: all 0.3s ease;
+}
+
+.mission-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.18;
+  z-index: 0;
+  border-radius: 15px;
+}
+
+.mission-content-wrapper {
+  position: relative;
+  z-index: 1;
 }
 
 .mission-card:hover {
@@ -173,8 +212,28 @@
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
-  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
   transition: all 0.3s ease;
+}
+
+.value-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.18;
+  z-index: 0;
+  border-radius: 12px;
+}
+
+.value-content-wrapper {
+  position: relative;
+  z-index: 1;
 }
 
 .value-item:hover {

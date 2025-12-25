@@ -12,6 +12,17 @@ import VideoLogo from '../VideoLogo';
 import Particles from '../Particles';
 import './About.css';
 
+// Background Images Configuration - Add your R2 URLs here
+const ABOUT_BACKGROUND_IMAGES = {
+  ourStory: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/about-us-hero-banner.png', // Our Story section background
+  ourMission: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/our-mission.png', // Our Mission section background
+  ourVision: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/our-vision.png', // Our Vision section background
+  authenticity: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/Authenticity%20Card.png', // Authenticity value card
+  innovation: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/Innovation%20Card.png', // Innovation value card
+  community: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/Community%20Card.png', // Community value card
+  excellence: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/Excellence%20Card.png' // Excellence value card
+};
+
 const About = () => {
   const { navigateWithLoading } = useNavigationWithLoading();
   useUsernameValidation('about'); // Validate username in URL
@@ -93,6 +104,7 @@ const About = () => {
         </section>
 
         <section className="about-story">
+          <div className="story-background-image" style={{ backgroundImage: ABOUT_BACKGROUND_IMAGES.ourStory ? `url(${ABOUT_BACKGROUND_IMAGES.ourStory})` : 'none' }}></div>
           <div className="story-content">
             <h2>Our Story - Manifesting Creativity Through Art Workshops in Hyderabad</h2>
             <p>
@@ -115,18 +127,24 @@ const About = () => {
         <section className="mission-vision">
           <div className="mission-grid">
             <div className="mission-card">
-              <h3>Our Mission</h3>
+              <div className="mission-background-image" style={{ backgroundImage: ABOUT_BACKGROUND_IMAGES.ourMission ? `url(${ABOUT_BACKGROUND_IMAGES.ourMission})` : 'none' }}></div>
+              <div className="mission-content-wrapper">
+                <h3>Our Mission</h3>
               <p>To provide world-class <strong>art workshops in Hyderabad</strong> that preserve, promote, and celebrate Indian art forms 
               while fostering a vibrant community of artists, students, and art enthusiasts. Our weekend workshops in cafes and restaurants 
               create unique spaces for <strong>manifesting through art</strong> by offering comprehensive workshop experiences, cultural heritage 
               appreciation, and creative expression opportunities for learners of all ages and skill levels.</p>
+              </div>
             </div>
             <div className="mission-card">
-              <h3>Our Vision - Leading Art Education in Hyderabad</h3>
+              <div className="mission-background-image" style={{ backgroundImage: ABOUT_BACKGROUND_IMAGES.ourVision ? `url(${ABOUT_BACKGROUND_IMAGES.ourVision})` : 'none' }}></div>
+              <div className="mission-content-wrapper">
+                <h3>Our Vision - Leading Art Education in Hyderabad</h3>
               <p>To be Hyderabad's premier destination for weekend art workshops, cultural exchange, and creative learning, 
               bridging traditional artistry with contemporary expression for future generations. We envision a thriving 
               artistic community where students, artists, and cultural enthusiasts unite in <strong>manifesting through art</strong> 
               through our unique cafe and restaurant workshop experiences, celebrating India's rich cultural heritage.</p>
+              </div>
             </div>
           </div>
         </section>
@@ -135,20 +153,32 @@ const About = () => {
           <h2>Our Values</h2>
           <div className="values-grid">
             <div className="value-item">
-              <h4>Authenticity</h4>
+              <div className="value-background-image" style={{ backgroundImage: ABOUT_BACKGROUND_IMAGES.authenticity ? `url(${ABOUT_BACKGROUND_IMAGES.authenticity})` : 'none' }}></div>
+              <div className="value-content-wrapper">
+                <h4>Authenticity</h4>
               <p>We honor the authentic traditions and techniques passed down through generations of master artists.</p>
+              </div>
             </div>
             <div className="value-item">
-              <h4>Innovation</h4>
+              <div className="value-background-image" style={{ backgroundImage: ABOUT_BACKGROUND_IMAGES.innovation ? `url(${ABOUT_BACKGROUND_IMAGES.innovation})` : 'none' }}></div>
+              <div className="value-content-wrapper">
+                <h4>Innovation</h4>
               <p>We embrace contemporary interpretations and new artistic expressions while respecting traditional roots.</p>
+              </div>
             </div>
             <div className="value-item">
-              <h4>Community</h4>
+              <div className="value-background-image" style={{ backgroundImage: ABOUT_BACKGROUND_IMAGES.community ? `url(${ABOUT_BACKGROUND_IMAGES.community})` : 'none' }}></div>
+              <div className="value-content-wrapper">
+                <h4>Community</h4>
               <p>We foster a inclusive community where artists and art lovers can connect, learn, and grow together.</p>
+              </div>
             </div>
             <div className="value-item">
-              <h4>Excellence</h4>
+              <div className="value-background-image" style={{ backgroundImage: ABOUT_BACKGROUND_IMAGES.excellence ? `url(${ABOUT_BACKGROUND_IMAGES.excellence})` : 'none' }}></div>
+              <div className="value-content-wrapper">
+                <h4>Excellence</h4>
               <p>We maintain the highest standards in curating, preserving, and presenting artworks to the public.</p>
+              </div>
             </div>
           </div>
         </section>
