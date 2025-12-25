@@ -118,7 +118,7 @@ const About = () => {
               creating an inspiring atmosphere for creativity. We feature expert instructors and comprehensive workshop experiences 
               spanning various Indian art forms, regional styles, and contemporary techniques. From ancient temple art methods to 
               modern creative workshops, Kalakritam offers an immersive weekend experience in India's artistic journey through 
-              hands-on learning, cultural appreciation, and creative expression. We believe in <strong>manifesting through art</strong> 
+              hands-on learning, cultural appreciation, and creative expression. We believe in <strong>manifesting through art </strong> 
               as a pathway to personal growth and cultural understanding.
             </p>
           </div>
@@ -142,7 +142,7 @@ const About = () => {
                 <h3>Our Vision - Leading Art Education in Hyderabad</h3>
               <p>To be Hyderabad's premier destination for weekend art workshops, cultural exchange, and creative learning, 
               bridging traditional artistry with contemporary expression for future generations. We envision a thriving 
-              artistic community where students, artists, and cultural enthusiasts unite in <strong>manifesting through art</strong> 
+              artistic community where students, artists, and cultural enthusiasts unite in <strong>manifesting through art </strong> 
               through our unique cafe and restaurant workshop experiences, celebrating India's rich cultural heritage.</p>
               </div>
             </div>

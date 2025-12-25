@@ -285,8 +285,39 @@
     padding: 2rem 1rem;
   }
   
+  .about-hero {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+  }
+  
   .about-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .about-subtitle {
+    font-size: 1rem;
+  }
+  
+  .about-story,
+  .mission-vision,
+  .values-section {
+    margin-bottom: 2.5rem;
+  }
+  
+  .story-content {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  
+  .story-content h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+  
+  .story-content p {
+    font-size: 1rem;
+    text-align: left;
   }
   
   .mission-grid,
@@ -295,13 +326,99 @@
     gap: 1.5rem;
   }
   
-  .story-content,
-  .mission-card,
-  .team-section {
-    padding: 2rem 1.5rem;
+  .mission-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  
+  .mission-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .mission-card p {
+    font-size: 0.95rem;
+  }
+  
+  .values-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
   }
   
   .value-item {
     padding: 1.5rem;
+    border-radius: 10px;
+  }
+  
+  .value-item h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .value-item p {
+    font-size: 0.9rem;
+  }
+  
+  .team-section {
+    padding: 1.5rem;
+    border-radius: 15px;
+  }
+  
+  .team-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .team-intro {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-content {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .about-hero {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .about-title {
+    font-size: 1.75rem;
+  }
+  
+  .about-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .story-content,
+  .mission-card,
+  .value-item,
+  .team-section {
+    padding: 1.25rem;
+  }
+  
+  .story-content h2,
+  .mission-card h3 {
+    font-size: 1.4rem;
+  }
+  
+  .values-section h2,
+  .team-section h2 {
+    font-size: 1.6rem;
+  }
+  
+  .story-content p,
+  .mission-card p,
+  .team-intro {
+    font-size: 0.9rem;
+  }
+  
+  .value-item h4 {
+    font-size: 1.1rem;
+  }
+  
+  .value-item p {
+    font-size: 0.85rem;
   }
 }
