@@ -6,7 +6,8 @@ import {
   shouldOptimizeForMobile,
   getNetworkOptimizations,
   getBatteryOptimizations,
-  mobileMemoryOptimization
+  mobileMemoryOptimization,
+  getOptimizedImageUrl
 } from '../utils/mobileOptimizations';
 import { mobilePerformanceMonitor } from '../utils/mobilePerformanceMonitor';
 
@@ -21,7 +22,9 @@ export const useMobileOptimizations = (pageName = 'page') => {
     const initializeOptimizations = async () => {
       if (isMobile) {
         mobilePerformanceMonitor.startLoadTime();
-        console.log(`🔧 Initializing mobile optimizations for ${pageName}`);
+        if (mobilePerformanceMonitor.shouldMonitor()) {
+          console.log(`🔧 Initializing mobile optimizations for ${pageName}`);
+        }
       }
       
       const networkOpts = getNetworkOptimizations();
@@ -34,14 +37,18 @@ export const useMobileOptimizations = (pageName = 'page') => {
       const optimizedParticleConfig = getMobileParticleConfig();
       if (batteryOpts.disableParticles || networkOpts.delayNonCritical || optimizedParticleConfig.disabled) {
         setParticleConfig({ ...optimizedParticleConfig, particleCount: 0, disabled: true });
-        console.log(`⚡ Particles disabled for ${pageName} due to battery/network optimization`);
+        if (mobilePerformanceMonitor.shouldMonitor()) {
+          console.log(`⚡ Particles disabled for ${pageName} due to battery/network optimization`);
+        }
       } else {
         setParticleConfig(optimizedParticleConfig);
       }
       
       if (isMobile) {
         mobilePerformanceMonitor.endLoadTime();
-        console.log(`✅ Mobile optimizations loaded for ${pageName}`);
+        if (mobilePerformanceMonitor.shouldMonitor()) {
+          console.log(`✅ Mobile optimizations loaded for ${pageName}`);
+        }
       }
     };
     

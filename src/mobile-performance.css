@@ -37,6 +37,29 @@
 }
 
 /* ============================================
+   CONTENT VISIBILITY (reduces offscreen work)
+   ============================================ */
+@media (max-width: 768px) {
+  .home-container,
+  .gallery-container,
+  .events-container,
+  .workshops-container,
+  .moments-container,
+  .artblogs-container,
+  .contact-container,
+  .artists-container,
+  .feature-card,
+  .universal-card,
+  .artwork-card,
+  .workshops-grid,
+  .events-grid,
+  .gallery-grid {
+    content-visibility: auto;
+    contain-intrinsic-size: 900px auto;
+  }
+}
+
+/* ============================================
    SCROLL PERFORMANCE
    ============================================ */
 @media (max-width: 768px) {

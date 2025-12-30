@@ -1,11 +1,16 @@
 // Mobile optimization utilities
+const isClient = typeof window !== 'undefined';
+
+let memoizedWebPSupport = null;
 
 // Device detection
 export const isMobile = () => {
+  if (!isClient) return false;
   return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 };
 
 export const isTouchDevice = () => {
+  if (!isClient) return false;
   return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 };
 
@@ -85,6 +90,7 @@ export const getMobileParticleConfig = () => {
 // Image optimization for mobile
 export const getOptimizedImageUrl = (url, isMobile = false) => {
   if (!url) return '';
+  if (!isClient) return url;
   
   // For mobile devices, request smaller images
   const width = isMobile ? 400 : 800;
@@ -95,14 +101,17 @@ export const getOptimizedImageUrl = (url, isMobile = false) => {
     return url;
   }
   
-  // Check if browser supports WebP
+  // Check if browser supports WebP (memoized to avoid repeated canvas work)
   const supportsWebP = (() => {
+    if (memoizedWebPSupport !== null) return memoizedWebPSupport;
     try {
       const canvas = document.createElement('canvas');
       canvas.width = 1;
       canvas.height = 1;
-      return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+      memoizedWebPSupport = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+      return memoizedWebPSupport;
     } catch (e) {
+      memoizedWebPSupport = false;
       return false;
     }
   })();
@@ -178,6 +187,7 @@ export const getMobileAnimationConfig = () => {
 export const mobileMemoryOptimization = {
   // Clean up unused resources
   cleanup: () => {
+    if (!isClient || document.visibilityState === 'hidden') return;
     if (isMobile()) {
       // Force garbage collection if available
       if (window.gc) {
@@ -187,7 +197,8 @@ export const mobileMemoryOptimization = {
       // Clear any cached images that are not visible
       const images = document.querySelectorAll('img[data-cached="true"]');
       images.forEach(img => {
-        if (!img.getBoundingClientRect().top < window.innerHeight + 200) {
+        const rectTop = img.getBoundingClientRect().top;
+        if (rectTop > window.innerHeight + 200) {
           img.removeAttribute('data-cached');
         }
       });
