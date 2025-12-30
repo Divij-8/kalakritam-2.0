@@ -1,12 +1,27 @@
 /* Mobile-specific optimizations for better performance */
 
-/* Base mobile optimizations */
+/* AGGRESSIVE MOBILE PERFORMANCE OPTIMIZATIONS */
 @media (max-width: 768px) {
-  /* Reduce backdrop filters for better performance */
-  .gallery-blur-overlay {
-    backdrop-filter: blur(4px) !important;
-    -webkit-backdrop-filter: blur(4px) !important;
-    background: rgba(0, 0, 0, 0.3) !important;
+  /* REMOVE ALL backdrop-filter on mobile - extremely expensive */
+  *[class*="blur"],
+  *[class*="Blur"],
+  .gallery-blur-overlay,
+  .home-blur-overlay,
+  .events-blur-overlay,
+  .workshops-blur-overlay,
+  .artists-blur-overlay,
+  .contact-blur-overlay,
+  .moments-blur-overlay,
+  .artblogs-blur-overlay,
+  [class*="-blur-overlay"],
+  [class*="-modal"],
+  [class*="-overlay"],
+  .universal-card,
+  .feature-card,
+  .artwork-overlay,
+  .notification-message {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
   
   /* Optimize gallery grid for mobile */
@@ -23,12 +38,34 @@
   }
   
   /* Simplify transitions on mobile */
-  .artwork-card {
-    transition: transform 0.2s ease !important;
+  .artwork-card,
+  .universal-card,
+  .feature-card,
+  .event-card,
+  .workshop-card {
+    transition: none !important; /* Remove transitions for better performance */
   }
   
-  .artwork-card:hover {
+  .artwork-card:hover,
+  .universal-card:hover,
+  .feature-card:hover {
     transform: none !important; /* Disable hover effects on mobile */
+  }
+  
+  /* Disable animations on mobile for performance */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Keep loading animations - but simplify */
+  .loading-spinner,
+  [class*="spinner"],
+  [class*="loader"] {
+    animation-duration: 1s !important;
   }
   
   /* Optimize text rendering */
@@ -243,13 +280,14 @@
 }
 
 /* Progressive enhancement for newer mobile browsers */
-@supports (backdrop-filter: blur(4px)) {
+/* DISABLED: Remove backdrop-filter completely on mobile for performance */
+/* @supports (backdrop-filter: blur(4px)) {
   @media (max-width: 768px) and (min-resolution: 2dppx) {
     .gallery-blur-overlay {
       backdrop-filter: blur(3px) !important;
     }
   }
-}
+} */
 
 /* Optimize for foldable devices */
 @media (max-width: 768px) and (orientation: landscape) {

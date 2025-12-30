@@ -8,31 +8,36 @@
    GPU ACCELERATION & COMPOSITING
    ============================================ */
 @media (max-width: 768px) {
-  /* Force GPU acceleration on key elements */
-  .home-container,
-  .gallery-container,
-  .events-container,
-  .workshops-container,
-  .contact-container,
+  /* Force GPU acceleration on key elements - MINIMAL USE */
   .mobile-sidebar,
   .hero-banner {
     transform: translateZ(0);
     backface-visibility: hidden;
-    perspective: 1000px;
   }
   
-  /* Optimize animations with will-change */
-  .mobile-sidebar,
-  .mobile-sidebar-overlay,
-  .hero-banner-media {
+  /* REMOVE will-change on mobile - causes memory issues */
+  * {
+    will-change: auto !important;
+  }
+  
+  /* Only use will-change on actively animating elements */
+  .mobile-sidebar.opening,
+  .mobile-sidebar-overlay.active {
     will-change: transform, opacity;
   }
   
-  /* Contain layout thrashing */
+  /* Contain layout thrashing - REDUCED for mobile */
   .feature-card,
   .universal-card,
   .artwork-card {
-    contain: layout style paint;
+    contain: layout paint; /* Remove 'style' containment for better compatibility */
+  }
+  
+  /* Optimize rendering with simpler transforms */
+  .gallery-grid,
+  .events-grid,
+  .workshops-grid {
+    transform: translateZ(0); /* Promote to own layer */
   }
 }
 
@@ -89,14 +94,25 @@
   img {
     content-visibility: auto;
     image-rendering: -webkit-optimize-contrast;
+    max-width: 100%;
+    height: auto;
   }
   
-  /* Lazy load offscreen content */
-  .artwork-card:nth-child(n+5),
-  .feature-card:nth-child(n+4),
-  .universal-card:nth-child(n+5) {
+  /* Lazy load offscreen content MORE AGGRESSIVELY */
+  .artwork-card:nth-child(n+4),
+  .feature-card:nth-child(n+3),
+  .universal-card:nth-child(n+4),
+  .event-card:nth-child(n+3),
+  .workshop-card:nth-child(n+3) {
     content-visibility: auto;
     contain-intrinsic-size: 350px;
+  }
+}
+
+/* Reduce image quality on slow connections */
+@media (max-width: 768px) and (prefers-reduced-data: reduce) {
+  img {
+    image-rendering: optimizeSpeed;
   }
 }
 
@@ -137,14 +153,35 @@
    MEMORY OPTIMIZATION
    ============================================ */
 @media (max-width: 768px) {
-  /* Hide offscreen decorative elements */
+  /* COMPLETELY HIDE particles on mobile for performance */
   .home-particles-background,
   .gallery-particles-background,
   .events-particles-background,
   .workshops-particles-background,
-  .contact-particles-background {
-    pointer-events: none;
-    z-index: 0;
+  .contact-particles-background,
+  .artists-particles-background,
+  .moments-particles-background,
+  .artblogs-particles-background,
+  [class*="-particles-background"] {
+    display: none !important; /* Completely remove from render tree */
+    visibility: hidden !important;
+  }
+  
+  /* Remove ALL backdrop-filter on mobile - very expensive */
+  .home-blur-overlay,
+  .gallery-blur-overlay,
+  .events-blur-overlay,
+  .workshops-blur-overlay,
+  .workshop-detail-blur-overlay,
+  .event-detail-blur-overlay,
+  .artwork-detail-blur-overlay,
+  .contact-blur-overlay,
+  .moments-blur-overlay,
+  .artists-blur-overlay,
+  .artblogs-blur-overlay,
+  [class*="-blur-overlay"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }
 

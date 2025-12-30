@@ -56,16 +56,17 @@ export const getMobileParticleConfig = () => {
   }
   
   if (isMobile()) {
+    // COMPLETELY DISABLE particles on mobile for maximum performance
     return {
-      particleCount: 100, // Reduced further from 300
-      particleSpread: 6,  // Reduced from 8
-      speed: 0.1,         // Reduced from 0.15
-      particleBaseSize: 100, // Reduced from 150
-      moveParticlesOnHover: false, // Disabled on mobile
-      particleHoverFactor: 1, // Reduced from 2
-      alphaParticles: false, // Disable alpha for better performance
-      disableRotation: true, // Disable rotation on mobile for better performance
-      disabled: false
+      particleCount: 0,   // No particles on mobile
+      particleSpread: 0,
+      speed: 0,
+      particleBaseSize: 0,
+      moveParticlesOnHover: false,
+      particleHoverFactor: 1,
+      alphaParticles: false,
+      disableRotation: true,
+      disabled: true  // Disabled on mobile
     };
   }
   return {
@@ -117,8 +118,8 @@ export const getOptimizedImageUrl = (url, isMobile = false) => {
 export const getMobileBlurConfig = () => {
   if (isMobile()) {
     return {
-      backdropFilter: 'blur(4px)', // Reduced from 8px
-      background: 'rgba(0, 0, 0, 0.3)' // Slightly more opaque to compensate for less blur
+      backdropFilter: 'none', // Remove expensive blur on mobile
+      background: 'rgba(0, 0, 0, 0.5)' // Use solid background instead
     };
   }
   return {
