@@ -40,15 +40,36 @@
    SCROLL PERFORMANCE
    ============================================ */
 @media (max-width: 768px) {
+  /* CRITICAL: Ensure vertical scrolling works on mobile */
+  html, body {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+    min-height: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  #root {
+    overflow-y: visible !important;
+    height: auto !important;
+    min-height: 100% !important;
+  }
+  
   /* Optimize scroll containers */
   .app,
   .home-container,
   .gallery-container,
   .events-container,
   .workshops-container,
-  .contact-container {
+  .contact-container,
+  .artists-container,
+  .artblogs-container,
+  .moments-container {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
+    overflow-y: visible;
+    height: auto;
+    min-height: 100vh;
   }
   
   /* Disable scroll anchoring on dynamic content */
@@ -99,15 +120,16 @@
    TOUCH INTERACTION OPTIMIZATION
    ============================================ */
 @media (max-width: 768px) {
-  /* Improve touch responsiveness */
+  /* Improve touch responsiveness - only on interactive elements */
   a, button, .clickable, .nav-link, .sidebar-nav-link, .filter-btn {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
   
-  /* Remove 300ms tap delay on all interactive elements */
-  * {
-    touch-action: manipulation;
+  /* Ensure scrolling works on main containers */
+  html, body, #root, .app {
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
