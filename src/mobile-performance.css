@@ -104,7 +104,7 @@
    ANIMATION OPTIMIZATION
    ============================================ */
 @media (max-width: 768px) {
-  /* Reduce animation complexity - but keep essential animations */
+  /* Reduce animation complexity */
   * {
     animation-timing-function: ease-out !important;
   }
@@ -113,25 +113,6 @@
   .scrolling * {
     animation-play-state: paused !important;
     transition-duration: 0ms !important;
-  }
-  
-  /* KEEP loading animations alive - these are essential */
-  .loading-spinner,
-  .loading-container,
-  .skeleton-loader,
-  [class*="spinner"],
-  [class*="loader"],
-  [class*="loading"],
-  .loading-overlay,
-  .loading-content,
-  .loading-text,
-  .video-logo,
-  .video-logo-container,
-  .intro-video,
-  .intro-video-container {
-    animation-duration: 1s !important;
-    animation-iteration-count: infinite !important;
-    animation-play-state: running !important;
   }
 }
 
@@ -156,29 +137,14 @@
    MEMORY OPTIMIZATION
    ============================================ */
 @media (max-width: 768px) {
-  /* COMPLETELY HIDE particles on mobile - they cause severe lag */
+  /* Hide offscreen decorative elements */
   .home-particles-background,
   .gallery-particles-background,
   .events-particles-background,
   .workshops-particles-background,
-  .contact-particles-background,
-  .moments-particles-background,
-  .artists-particles-background,
-  .artblogs-particles-background,
-  .artwork-detail-particles-background,
-  .workshop-detail-particles-background,
-  .event-detail-particles-background,
-  .app-particles-background,
-  [class*="-particles-background"],
-  .particles-container {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    opacity: 0 !important;
-    z-index: -999 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
+  .contact-particles-background {
+    pointer-events: none;
+    z-index: 0;
   }
 }
 

@@ -39,13 +39,11 @@ export const shouldOptimizeForMobile = () => {
 // Performance optimization for mobile
 export const getMobileParticleConfig = () => {
   const slowConnection = isSlowConnection();
-  const mobileDevice = isMobile();
   
-  // COMPLETELY DISABLE particles on mobile devices for maximum performance
-  // WebGL canvas rendering is extremely expensive on mobile and causes lag
-  if (mobileDevice || slowConnection) {
+  // Disable particles completely on slow connections
+  if (slowConnection) {
     return {
-      particleCount: 0,
+      particleCount: 0, // Disabled on slow connections
       particleSpread: 0,
       speed: 0,
       particleBaseSize: 0,
@@ -53,10 +51,23 @@ export const getMobileParticleConfig = () => {
       particleHoverFactor: 1,
       alphaParticles: false,
       disableRotation: true,
-      disabled: true // Completely disable - no WebGL context created
+      disabled: true
     };
   }
   
+  if (isMobile()) {
+    return {
+      particleCount: 100, // Reduced further from 300
+      particleSpread: 6,  // Reduced from 8
+      speed: 0.1,         // Reduced from 0.15
+      particleBaseSize: 100, // Reduced from 150
+      moveParticlesOnHover: false, // Disabled on mobile
+      particleHoverFactor: 1, // Reduced from 2
+      alphaParticles: false, // Disable alpha for better performance
+      disableRotation: true, // Disable rotation on mobile for better performance
+      disabled: false
+    };
+  }
   return {
     particleCount: 1000,
     particleSpread: 10,
@@ -105,11 +116,9 @@ export const getOptimizedImageUrl = (url, isMobile = false) => {
 // Reduce CSS effects on mobile for better performance
 export const getMobileBlurConfig = () => {
   if (isMobile()) {
-    // COMPLETELY DISABLE backdrop-filter on mobile - it's extremely expensive
-    // Use solid background color instead for much better performance
     return {
-      backdropFilter: 'none', // Disabled completely on mobile
-      background: 'rgba(0, 0, 0, 0.5)' // More opaque to compensate for no blur
+      backdropFilter: 'blur(4px)', // Reduced from 8px
+      background: 'rgba(0, 0, 0, 0.3)' // Slightly more opaque to compensate for less blur
     };
   }
   return {

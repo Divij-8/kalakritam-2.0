@@ -1,31 +1,5 @@
 /* Mobile-specific optimizations for better performance */
 
-/* COMPLETELY DISABLE PARTICLES ON MOBILE */
-@media (max-width: 768px) {
-  .home-particles-background,
-  .gallery-particles-background,
-  .events-particles-background,
-  .workshops-particles-background,
-  .contact-particles-background,
-  .moments-particles-background,
-  .artists-particles-background,
-  .artblogs-particles-background,
-  .artwork-detail-particles-background,
-  .workshop-detail-particles-background,
-  .event-detail-particles-background,
-  .app-particles-background,
-  [class*="-particles-background"],
-  .particles-container,
-  canvas[class*="particles"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
-    pointer-events: none !important;
-  }
-}
-
 /* AGGRESSIVE MOBILE PERFORMANCE OPTIMIZATIONS */
 @media (max-width: 768px) {
   /* REMOVE ALL backdrop-filter on mobile - extremely expensive */
@@ -78,32 +52,20 @@
     transform: none !important; /* Disable hover effects on mobile */
   }
   
-  /* Disable animations on mobile for performance - EXCEPT loading animations */
-  *:not(.loading-spinner):not([class*="spinner"]):not([class*="loader"]):not([class*="loading"]):not(.video-logo):not(.video-logo-container):not(.intro-video):not(.intro-video-container),
-  *:not(.loading-spinner):not([class*="spinner"]):not([class*="loader"]):not([class*="loading"])::before,
-  *:not(.loading-spinner):not([class*="spinner"]):not([class*="loader"]):not([class*="loading"])::after {
+  /* Disable animations on mobile for performance */
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
   
-  /* PRESERVE loading animations */
+  /* Keep loading animations - but simplify */
   .loading-spinner,
-  .loading-container,
-  .loading-overlay,
-  .loading-content,
-  .skeleton-loader,
   [class*="spinner"],
-  [class*="loader"]:not([class*="particles"]),
-  [class*="loading"],
-  .video-logo,
-  .video-logo-container,
-  .intro-video,
-  .intro-video-container {
+  [class*="loader"] {
     animation-duration: 1s !important;
-    animation-iteration-count: infinite !important;
-    animation-play-state: running !important;
-    transition-duration: 0.3s !important;
   }
   
   /* Optimize text rendering */
