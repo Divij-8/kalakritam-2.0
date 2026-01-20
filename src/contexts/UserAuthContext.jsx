@@ -44,15 +44,15 @@ export const UserAuthProvider = ({ children }) => {
   
   console.log(`UserAuthProvider [${providerId.current}] - Initialized`);
 
-  // Log state changes for debugging
-  useEffect(() => {
-    console.log(`UserAuthContext [${providerId.current}] - State changed:`, {
-      isAuthenticated,
-      hasUser: !!user,
-      isLoading,
-      hasToken: !!token
-    });
-  }, [isAuthenticated, user, isLoading, token]);
+  // State change logging DISABLED to prevent excessive re-renders
+  // useEffect(() => {
+  //   console.log(`UserAuthContext [${providerId.current}] - State changed:`, {
+  //     isAuthenticated,
+  //     hasUser: !!user,
+  //     isLoading,
+  //     hasToken: !!token
+  //   });
+  // }, [isAuthenticated, user, isLoading, token]);
 
   // Check authentication status on mount
   useEffect(() => {

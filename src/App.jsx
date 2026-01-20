@@ -494,8 +494,7 @@ const AppContent = () => {
             <LazyLoadingErrorBoundary>
               <Suspense fallback={<LazyLoadingFallback />}>
                 <Routes>
-                  {/* Temporarily skip IntroVideo for performance - redirect to /home */}
-                  <Route path="/" element={<Navigate to="/home" replace />} />
+                  <Route path="/" element={<IntroVideo />} />
                   <Route path="/intro" element={<IntroVideo />} />
                   <Route path="/home" element={<Home />} />
                   <Route path="/gallery" element={<Gallery />} />

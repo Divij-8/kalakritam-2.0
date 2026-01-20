@@ -70,10 +70,13 @@ const Home = () => {
   const [networkOptimizations, setNetworkOptimizations] = useState({});
   const [batteryOptimizations, setBatteryOptimizations] = useState({});
 
-  // Initialize mobile optimizations
+  // Initialize mobile optimizations - ONLY ONCE
   useEffect(() => {
     const initializeOptimizations = async () => {
-      if (isMobile) {
+      const currentIsMobile = shouldOptimizeForMobile();
+      setIsMobile(currentIsMobile);
+      
+      if (currentIsMobile) {
         mobilePerformanceMonitor.startLoadTime();
       }
       
@@ -88,7 +91,7 @@ const Home = () => {
         setParticleConfig({ ...particleConfig, particleCount: 0 });
       }
       
-      if (isMobile) {
+      if (currentIsMobile) {
         mobilePerformanceMonitor.endLoadTime();
       }
     };
@@ -108,19 +111,17 @@ const Home = () => {
     window.addEventListener('resize', handleResize);
     
     // Set up memory cleanup for mobile
-    if (isMobile) {
-      const cleanupInterval = setInterval(() => {
+    const cleanupInterval = setInterval(() => {
+      if (shouldOptimizeForMobile()) {
         mobileMemoryOptimization.cleanup();
-      }, 30000);
-      
-      return () => {
-        clearInterval(cleanupInterval);
-        window.removeEventListener('resize', handleResize);
-      };
-    }
+      }
+    }, 30000);
     
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isMobile]);
+    return () => {
+      clearInterval(cleanupInterval);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []); // Empty dependency - run ONLY once
 
   // Navigation handler with toast feedback
   const handleNavigation = (path, sectionName) => {

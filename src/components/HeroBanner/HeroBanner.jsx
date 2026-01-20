@@ -9,9 +9,14 @@ const HeroBanner = () => {
   const [error, setError] = useState(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = React.useRef(null);
+  const fetchCalled = React.useRef(false); // Prevent duplicate API calls
 
   useEffect(() => {
-    fetchActiveBanners();
+    // Only fetch once
+    if (!fetchCalled.current) {
+      fetchActiveBanners();
+      fetchCalled.current = true;
+    }
   }, []);
 
   const fetchActiveBanners = async () => {
