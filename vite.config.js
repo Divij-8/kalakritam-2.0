@@ -40,9 +40,8 @@ export default defineConfig({
             return 'vendor-router';
           }
           
-          // MUI Core components - used across multiple pages
-          if (id.includes('node_modules/@mui/material/') || 
-              id.includes('node_modules/@mui/system/') ||
+          // MUI Core components - keep all MUI + Emotion together to avoid circular chunk issues
+          if (id.includes('node_modules/@mui/') || 
               id.includes('node_modules/@emotion/')) {
             return 'vendor-mui-core';
           }
