@@ -6,7 +6,7 @@ import GuestOnly from './components/GuestOnly'
 import { LoadingProvider, useLoading } from './contexts/LoadingContext.jsx'
 import { UserAuthProvider } from './contexts/UserAuthContext.jsx'
 import Loading from './components/Loading'
-import Particles from './components/Particles'
+// Particles removed - pages load their own if needed
 import { measureLazyLoadTime } from './hooks/usePerformanceTracking'
 import { seoManager } from './utils/seoManager.js'
 import useServerConnection from './hooks/useServerConnection.js'
@@ -314,15 +314,8 @@ const handleLinkHover = (route) => {
   }, 300); // 300ms debounce
 };
 
-// Attach hover listeners after component mount
-if (typeof window !== 'undefined') {
-  window.addEventListener('DOMContentLoaded', () => {
-    // Only preload most critical route after initial load
-    setTimeout(() => {
-      preloadRouteChunks('/home');
-    }, 2000);
-  });
-}
+// Preloading disabled - pages load only when navigated to
+// Hover preloading still available via handleLinkHover function
 
 // Lazy loading fallback component - minimal loader without text
 const LazyLoadingFallback = () => (
@@ -425,25 +418,8 @@ const AppContent = () => {
     }
   });
 
-  // Attach hover preloading to navigation links
-  useEffect(() => {
-    const handleMouseOver = (e) => {
-      const link = e.target.closest('a');
-      if (link) {
-        const href = link.getAttribute('href');
-        if (href && href.startsWith('/')) {
-          preloadRouteChunks(href);
-        }
-      }
-    };
-
-    // Use event delegation for better performance
-    document.addEventListener('mouseover', handleMouseOver);
-    
-    return () => {
-      document.removeEventListener('mouseover', handleMouseOver);
-    };
-  }, []);
+  // Hover preloading DISABLED - pages load ONLY when clicked
+  // This ensures minimal initial load
 
   // Check if video has been completed
   useEffect(() => {
@@ -508,51 +484,19 @@ const AppContent = () => {
       <Router>
         <PageOptimizer />
         <div className="app">
-          {/* Particles disabled on mobile for optimal performance */}
-          {showParticles && !isOnMobile && (
-            <div className="app-particles-background">
-              <Particles
-                particleColors={['#c38f21', '#ffffff', '#c38f21']}
-                particleCount={1000}
-                particleSpread={10}
-                speed={0.2}
-                particleBaseSize={200}
-                moveParticlesOnHover={true}
-                particleHoverFactor={2}
-                alphaParticles={true}
-                disableRotation={false}
-              />
-            </div>
-          )}
+          {/* Global Particles DISABLED - Each page loads its own if needed */}
+          {/* This prevents loading Particles component on every page */}
           
-          {/* Background Home page during intro video - with blur effect */}
-          {showHome && (
-            <div 
-              className="app-background-home" 
-              style={{
-                filter: homeBlurred ? 'blur(20px)' : 'blur(0px)',
-                opacity: homeBlurred ? 0.3 : 1,
-                transition: 'filter 1.5s ease-out, opacity 1.5s ease-out',
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: 5
-              }}
-            >
-              <Suspense fallback={null}>
-                <Home />
-              </Suspense>
-            </div>
-          )}
+          {/* Background Home DISABLED - was causing 300+ requests on initial load */}
           
           <div className="app-content">
             <ScrollToTop behavior="auto" />
             <LazyLoadingErrorBoundary>
               <Suspense fallback={<LazyLoadingFallback />}>
                 <Routes>
-                  <Route path="/" element={<IntroVideo />} />
+                  {/* Temporarily skip IntroVideo for performance - redirect to /home */}
+                  <Route path="/" element={<Navigate to="/home" replace />} />
+                  <Route path="/intro" element={<IntroVideo />} />
                   <Route path="/home" element={<Home />} />
                   <Route path="/gallery" element={<Gallery />} />
                   <Route path="/gallery/:slug" element={<ArtworkDetail />} />

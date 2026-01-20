@@ -19,18 +19,20 @@ import Particles from '../Particles';
 import HeroBanner from '../HeroBanner';
 import TextType from './TextType';
 import SplitTextAnimation from '../SplitTextAnimation';
+import LazyBackgroundImage from '../LazyBackgroundImage';
 import './Home.css';
 import '../../assets/fonts/fonts.css';
 
-// Background Images Configuration - Add your R2 URLs here
+// Background Images Configuration - LAZY LOADED, not preloaded
+// Images will load only when cards are visible in viewport
 const CARD_BACKGROUND_IMAGES = {
-  gallery: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/k1.jpeg', // Gallery background
-  workshops: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_16_01%20PM.png', // Workshops background
-  events: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_31_27%20PM.png', // Events background
-  artists: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_33_22%20PM.png', // Artists background
-  blogs: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_34_49%20PM.png', // Blogs background
-  contact: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_37_08%20PM.png', // Contact background
-  aboutBackground: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_47_58%20PM.png' // About section background
+  gallery: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/k1.jpeg',
+  workshops: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_16_01%20PM.png',
+  events: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_31_27%20PM.png',
+  artists: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_33_22%20PM.png',
+  blogs: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_34_49%20PM.png',
+  contact: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_37_08%20PM.png',
+  aboutBackground: 'https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/home/ChatGPT%20Image%20Dec%2025%2C%202025%2C%2004_47_58%20PM.png'
 };
 
 const Home = () => {
@@ -328,7 +330,7 @@ const Home = () => {
           <h2 className="section-title">Experience Indian Art at Kalakritam - Hyderabad's Premier Art Destination</h2>
           <div className="features-grid">
             <article className="feature-card" data-card="gallery" onClick={() => handleNavigation('/gallery', 'Art Gallery')}>
-              <div className="card-background-image" style={{ backgroundImage: CARD_BACKGROUND_IMAGES.gallery ? `url(${CARD_BACKGROUND_IMAGES.gallery})` : 'none' }}></div>
+              <LazyBackgroundImage imageUrl={CARD_BACKGROUND_IMAGES.gallery} className="card-background-image" />
               <div className="card-content-wrapper">
                 <div className="card-icon">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
@@ -344,7 +346,7 @@ const Home = () => {
             </article>
 
             <article className="feature-card" data-card="workshops" onClick={() => navigateWithLoading('/workshops')}>
-              <div className="card-background-image" style={{ backgroundImage: CARD_BACKGROUND_IMAGES.workshops ? `url(${CARD_BACKGROUND_IMAGES.workshops})` : 'none' }}></div>
+              <LazyBackgroundImage imageUrl={CARD_BACKGROUND_IMAGES.workshops} className="card-background-image" />
               <div className="card-content-wrapper">
                 <div className="card-icon">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
@@ -360,7 +362,7 @@ const Home = () => {
             </article>
 
             <article className="feature-card" data-card="events" onClick={() => navigateWithLoading('/events')}>
-              <div className="card-background-image" style={{ backgroundImage: CARD_BACKGROUND_IMAGES.events ? `url(${CARD_BACKGROUND_IMAGES.events})` : 'none' }}></div>
+              <LazyBackgroundImage imageUrl={CARD_BACKGROUND_IMAGES.events} className="card-background-image" />
               <div className="card-content-wrapper">
                 <div className="card-icon">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
@@ -376,7 +378,7 @@ const Home = () => {
             </article>
 
             <article className="feature-card" data-card="artists" onClick={() => navigateWithLoading('/artists')}>
-              <div className="card-background-image" style={{ backgroundImage: CARD_BACKGROUND_IMAGES.artists ? `url(${CARD_BACKGROUND_IMAGES.artists})` : 'none' }}></div>
+              <LazyBackgroundImage imageUrl={CARD_BACKGROUND_IMAGES.artists} className="card-background-image" />
               <div className="card-content-wrapper">
                 <div className="card-icon">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
@@ -392,7 +394,7 @@ const Home = () => {
             </article>
 
             <article className="feature-card" data-card="blogs" onClick={() => navigateWithLoading('/artblogs')}>
-              <div className="card-background-image" style={{ backgroundImage: CARD_BACKGROUND_IMAGES.blogs ? `url(${CARD_BACKGROUND_IMAGES.blogs})` : 'none' }}></div>
+              <LazyBackgroundImage imageUrl={CARD_BACKGROUND_IMAGES.blogs} className="card-background-image" />
               <div className="card-content-wrapper">
                 <div className="card-icon">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
@@ -408,7 +410,7 @@ const Home = () => {
             </article>
 
             <article className="feature-card" data-card="contact" onClick={() => navigateWithLoading('/contact')}>
-              <div className="card-background-image" style={{ backgroundImage: CARD_BACKGROUND_IMAGES.contact ? `url(${CARD_BACKGROUND_IMAGES.contact})` : 'none' }}></div>
+              <LazyBackgroundImage imageUrl={CARD_BACKGROUND_IMAGES.contact} className="card-background-image" />
               <div className="card-content-wrapper">
                 <div className="card-icon">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
@@ -426,7 +428,7 @@ const Home = () => {
         </section>
 
         <section className="about-section">
-          <div className="about-background-image" style={{ backgroundImage: CARD_BACKGROUND_IMAGES.aboutBackground ? `url(${CARD_BACKGROUND_IMAGES.aboutBackground})` : 'none' }}></div>
+          <LazyBackgroundImage imageUrl={CARD_BACKGROUND_IMAGES.aboutBackground} className="about-background-image" />
           <div className="about-content-wrapper">
             <h2>About Kalakritam - Hyderabad's Premier Art Workshop Center | Manifesting Through Art</h2>
           <p>

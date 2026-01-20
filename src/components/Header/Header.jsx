@@ -6,7 +6,7 @@ import { getUserPath, getNavigationPath } from '../../utils/userHelpers';
 import { gsap } from 'gsap';
 import NotificationBell from '../NotificationBell';
 import './Header.css';
-import Artists from '../Artists';
+// Artists component removed - was causing 200+ unnecessary requests
 
 const Header = ({ currentPage = 'home' }) => {
   const navigate = useNavigate();
