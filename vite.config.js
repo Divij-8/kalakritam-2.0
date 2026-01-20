@@ -23,11 +23,101 @@ export default defineConfig({
         format: 'es',
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]'
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+        // Manual chunk splitting for better caching and loading
+        manualChunks(id) {
+          // React core libraries - loaded on every page
+          if (id.includes('node_modules/react/') || 
+              id.includes('node_modules/react-dom/') || 
+              id.includes('node_modules/scheduler/')) {
+            return 'vendor-react';
+          }
+          
+          // React Router - loaded on every page
+          if (id.includes('node_modules/react-router-dom/') || 
+              id.includes('node_modules/react-router/') ||
+              id.includes('node_modules/@remix-run/')) {
+            return 'vendor-router';
+          }
+          
+          // MUI Core components - used across multiple pages
+          if (id.includes('node_modules/@mui/material/') || 
+              id.includes('node_modules/@mui/system/') ||
+              id.includes('node_modules/@emotion/')) {
+            return 'vendor-mui-core';
+          }
+          
+          // MUI Charts - only used in admin financials
+          if (id.includes('node_modules/@mui/x-charts/')) {
+            return 'vendor-mui-charts';
+          }
+          
+          // Three.js and related - only used in specific components
+          if (id.includes('node_modules/three/') || 
+              id.includes('node_modules/@react-three/') ||
+              id.includes('node_modules/ogl/')) {
+            return 'vendor-three';
+          }
+          
+          // GSAP animation library
+          if (id.includes('node_modules/gsap/')) {
+            return 'vendor-gsap';
+          }
+          
+          // React Icons - used across multiple components
+          if (id.includes('node_modules/react-icons/')) {
+            return 'vendor-icons';
+          }
+          
+          // Motion/Animation libraries (except GSAP)
+          if (id.includes('node_modules/motion/') || 
+              id.includes('node_modules/@barba/')) {
+            return 'vendor-animations';
+          }
+          
+          // Other large utilities - split individually
+          if (id.includes('node_modules/html2canvas/')) {
+            return 'vendor-html2canvas';
+          }
+          
+          if (id.includes('node_modules/jspdf/')) {
+            return 'vendor-jspdf';
+          }
+          
+          if (id.includes('node_modules/qrcode/')) {
+            return 'vendor-qrcode';
+          }
+          
+          // React Toastify
+          if (id.includes('node_modules/react-toastify/')) {
+            return 'vendor-toast';
+          }
+          
+          // Rapier physics (heavy, only used in specific 3D components)
+          if (id.includes('node_modules/@react-three/rapier/') ||
+              id.includes('node_modules/@dimforge/')) {
+            return 'vendor-physics';
+          }
+          
+          // Postprocessing effects
+          if (id.includes('node_modules/postprocessing/')) {
+            return 'vendor-postprocessing';
+          }
+          
+          // React Helmet for SEO
+          if (id.includes('node_modules/react-helmet-async/')) {
+            return 'vendor-helmet';
+          }
+          
+          // Group all other node_modules into a common vendor chunk
+          if (id.includes('node_modules/')) {
+            return 'vendor-common';
+          }
+        }
       }
     },
     // Optimize chunk size
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 600,
     // Target modern browsers for better performance
     target: 'es2020',
     // Use esbuild for minification (faster)
@@ -36,10 +126,8 @@ export default defineConfig({
     sourcemap: process.env.NODE_ENV === 'development',
     // Optimize CSS
     cssMinify: true,
-    // Preload modules (use defaults)
-    modulePreload: {
-      polyfill: true
-    },
+    // Disable module preload to prevent loading all chunks upfront
+    modulePreload: false,
     // Ensure proper module initialization order
     commonjsOptions: {
       include: [/node_modules/],

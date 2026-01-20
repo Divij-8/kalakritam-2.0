@@ -175,17 +175,8 @@ const Events = () => {
             <p className="events-subtitle">Discover Art Experiences</p>
           </header>
           
-          <section className="events-filters">
-            <div className="view-toggle">
-              <div className="loading-skeleton" style={{ width: '120px', height: '40px', borderRadius: '20px' }} />
-              <div className="loading-skeleton" style={{ width: '120px', height: '40px', borderRadius: '20px' }} />
-            </div>
-          </section>
-          
-          <div className="events-grid">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="loading-skeleton" style={{ width: '100%', height: '300px', borderRadius: '12px' }} />
-            ))}
+          <div className="loading-message" style={{ textAlign: 'center', padding: '3rem', color: '#c38f21' }}>
+            <p style={{ fontSize: '1.2rem' }}>Loading events...</p>
           </div>
         </div>
         <Footer />

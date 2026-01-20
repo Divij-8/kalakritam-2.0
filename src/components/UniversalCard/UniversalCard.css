@@ -1,14 +1,16 @@
 .universal-card {
   background: linear-gradient(135deg, rgba(195, 143, 33, 0.12) 0%, rgba(212, 175, 133, 0.08) 100%);
-  border-radius: 25px;
+  border-radius: 20px;
   overflow: hidden;
   border: 1px solid rgba(195, 143, 33, 0.25);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  width: 100%;
-  max-width: 450px;
+  width: 320px;
+  height: 480px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .universal-card::before {
@@ -21,11 +23,12 @@
   background: linear-gradient(90deg, #c38f21, #d4af85, #c38f21);
   opacity: 0;
   transition: opacity 0.3s ease;
+  z-index: 1;
 }
 
 .universal-card:hover {
-  transform: translateY(-12px) scale(1.02);
-  box-shadow: 0 20px 60px rgba(195, 143, 33, 0.4);
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(195, 143, 33, 0.35);
   border-color: rgba(195, 143, 33, 0.5);
 }
 
@@ -37,20 +40,22 @@
 .universal-card-image-container {
   position: relative;
   width: 100%;
-  min-height: 200px;
+  height: 200px;
   overflow: hidden;
   background: linear-gradient(135deg, #002f2f 0%, #001a1a 100%);
+  flex-shrink: 0;
 }
 
 .universal-card-image {
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  display: block;
+  object-fit: cover;
   transition: transform 0.3s ease;
 }
 
 .universal-card:hover .universal-card-image {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .universal-card-image-placeholder {
@@ -59,6 +64,7 @@
   left: 0;
   width: 100%;
   height: 100%;
+  min-height: 180px;
   background: linear-gradient(135deg, #002f2f 0%, #001a1a 100%);
   display: flex;
   flex-direction: column;
@@ -69,9 +75,9 @@
 
 .universal-card-logo-text {
   font-family: 'Samarkan', cursive;
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: #c38f21;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
@@ -121,23 +127,27 @@
 
 /* Content Section */
 .universal-card-content {
-  padding: 30px;
+  padding: 20px;
   background: linear-gradient(135deg, rgba(0, 47, 47, 0.8) 0%, rgba(0, 26, 26, 0.9) 100%);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .universal-card-title {
   color: #c38f21;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   letter-spacing: 0.5px;
   text-align: center;
+  font-family: 'Samarkan', cursive;
 }
 
 .universal-card-subtitle {
   color: #d4af85;
-  font-size: 1.1rem;
-  margin: 0 0 15px;
+  font-size: 0.95rem;
+  margin: 0 0 12px;
   font-weight: 500;
   text-align: center;
   font-style: italic;
@@ -159,10 +169,10 @@
 
 /* Details Section */
 .universal-card-details {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   background: rgba(195, 143, 33, 0.08);
-  border-radius: 12px;
-  padding: 15px;
+  border-radius: 10px;
+  padding: 12px;
   border: 1px solid rgba(195, 143, 33, 0.2);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -171,9 +181,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
+  padding: 6px 0;
   border-bottom: 1px solid rgba(195, 143, 33, 0.15);
-  min-height: 32px;
+  min-height: 28px;
   position: relative;
   transition: all 0.3s ease;
 }
@@ -218,22 +228,22 @@
 
 /* Actions Section */
 .universal-card-actions {
-  margin-top: 15px;
+  margin-top: auto;
   display: flex;
   gap: 10px;
-  padding-top: 15px;
+  padding-top: 12px;
   border-top: 1px solid rgba(195, 143, 33, 0.2);
   justify-content: center;
   align-items: center;
 }
 
 .universal-card-btn {
-  padding: 12px 20px;
+  padding: 10px 18px;
   border: none;
-  border-radius: 25px;
+  border-radius: 20px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -242,7 +252,6 @@
   background: linear-gradient(135deg, #c38f21 0%, #d4af85 100%);
   color: #002f2f;
   box-shadow: 0 4px 15px rgba(195, 143, 33, 0.3);
-  max-width: 250px;
   text-decoration: none;
   display: inline-block;
   text-align: center;
@@ -271,9 +280,10 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .universal-card {
-    max-width: 100%;
+    width: 100%;
+    height: 420px;
     margin: 0 auto;
-    border-radius: 20px;
+    border-radius: 16px;
   }
   
   .universal-card:hover {
@@ -286,63 +296,63 @@
   }
   
   .universal-card-image-container {
-    min-height: 180px;
+    height: 160px;
   }
   
   .universal-card-content {
-    padding: 1.25rem;
+    padding: 1rem;
   }
   
   .universal-card-title {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
   }
   
   .universal-card-subtitle {
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
   }
   
   .universal-card-description {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     -webkit-line-clamp: 2;
     line-clamp: 2;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
   
   .universal-card-details {
-    padding: 12px;
-    margin-bottom: 12px;
+    padding: 10px;
+    margin-bottom: 10px;
   }
   
   .universal-card-detail-row {
-    padding: 6px 0;
-    min-height: 28px;
+    padding: 5px 0;
+    min-height: 24px;
   }
   
   .universal-card-detail-label {
-    font-size: 0.85rem;
-    flex: 0 0 45%;
+    font-size: 0.75rem;
+    flex: 0 0 40%;
   }
   
   .universal-card-detail-value {
-    font-size: 0.85rem;
-    padding-left: 8px;
+    font-size: 0.75rem;
+    padding-left: 6px;
   }
   
   .universal-card-actions {
     flex-direction: column;
     gap: 8px;
-    margin-top: 12px;
-    padding-top: 12px;
+    margin-top: auto;
+    padding-top: 10px;
   }
   
   .universal-card-btn {
     width: 100%;
     max-width: 100%;
-    padding: 12px 16px;
-    min-height: 44px;
-    font-size: 0.9rem;
+    padding: 10px 14px;
+    min-height: 40px;
+    font-size: 0.8rem;
   }
   
   /* Image overlay adjustments */

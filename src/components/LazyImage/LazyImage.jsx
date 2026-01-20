@@ -37,8 +37,9 @@ const MobileImage = ({ src, alt, className = '', aspectRatio, priority = false, 
           className={`lazy-image mobile-lazy-image ${isLoaded ? 'loaded' : 'loading'}`}
           onLoad={handleLoad}
           onError={handleError}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
           decoding="async"
+          fetchpriority={priority ? "high" : "auto"}
         />
       ) : (
         <div className="lazy-image-error mobile-image-error">
@@ -66,7 +67,7 @@ const LazyImage = ({
 }) => {
   // For mobile - use viewport-based lazy loading
   if (IS_MOBILE) {
-    return <MobileImage src={src} alt={alt} className={className} aspectRatio={aspectRatio} priority={priority} {...props} />;
+    return <MobileImage src={src} alt={alt} className={className} aspectRatio={aspectRatio} priority={priority} onLoad={onLoad} onError={onError} {...props} />;
   }
   
   // Desktop version with immediate loading
@@ -86,7 +87,7 @@ const LazyImage = ({
       setTimeout(() => {
         setRetryCount(prev => prev + 1);
         setHasError(false);
-      }, Math.pow(2, retryCount) * 1000);
+      }, Math.pow(2, retryCount) * 500); // Faster retry: 500ms, 1s, 2s
     } else {
       setHasError(true);
       onError && onError();

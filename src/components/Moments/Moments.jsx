@@ -166,18 +166,8 @@ const Moments = () => {
             <p className="moments-subtitle">Captured Memories from Our Events</p>
           </header>
           
-          <div className="moments-skeleton-grid">
-            {[1, 2, 3, 4].map((col) => (
-              <div key={col} className="moments-skeleton-column">
-                {[1, 2, 3].map((item) => (
-                  <div 
-                    key={item} 
-                    className="loading-skeleton moments-skeleton-item"
-                    style={{ width: '100%', height: '200px', borderRadius: '12px' }}
-                  />
-                ))}
-              </div>
-            ))}
+          <div className="loading-message" style={{ textAlign: 'center', padding: '3rem', color: '#c38f21' }}>
+            <p style={{ fontSize: '1.2rem' }}>Loading moments...</p>
           </div>
         </div>
         <Footer />

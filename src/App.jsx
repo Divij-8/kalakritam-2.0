@@ -14,6 +14,7 @@ import { toast } from './utils/notifications.js'
 import { updateSpeculationRules } from './utils/pageOptimizationScript.js'
 import { isMobile } from './utils/mobileOptimizations.js'
 import MuiToastContainer from './components/MuiToastContainer'
+import { preloadRouteChunks } from './utils/chunkPreloader.js'
 import './App.css'
 import ScrollToTop from './components/ScrollToTop.jsx'
 
@@ -302,73 +303,24 @@ const NotFound = React.lazy(() => {
   });
 });
 
-// Preload commonly visited components for better UX
-const preloadComponent = (componentImport) => {
-  const componentImportFunc = componentImport;
-  componentImportFunc();
+// Optimized preloading - only preload on hover with debounce
+let preloadTimeout = null;
+const handleLinkHover = (route) => {
+  if (preloadTimeout) {
+    clearTimeout(preloadTimeout);
+  }
+  preloadTimeout = setTimeout(() => {
+    preloadRouteChunks(route);
+  }, 300); // 300ms debounce
 };
 
-// Smart preloading strategy - reduced timeout and selective preloading
-setTimeout(() => {
-  // Only preload the most commonly visited components
-  preloadComponent(() => import('./components/Home'));
-  preloadComponent(() => import('./components/Gallery'));
-}, 2000); // Reduced from 3000ms
-
-// Optimized preloading on user interaction hints
+// Attach hover listeners after component mount
 if (typeof window !== 'undefined') {
-  let preloadTimeouts = new Map();
-  
-  window.addEventListener('mouseover', (e) => {
-    // Preload components when user hovers over navigation links
-    const target = e.target.closest('a');
-    if (target) {
-      const href = target.getAttribute('href');
-      
-      // Clear existing timeout for this href
-      if (preloadTimeouts.has(href)) {
-        clearTimeout(preloadTimeouts.get(href));
-      }
-      
-      // Set a small delay to avoid preloading on quick mouse movements
-      const timeoutId = setTimeout(() => {
-        switch (href) {
-          case '/workshops':
-            preloadComponent(() => import('./components/Workshops'));
-            break;
-        case '/artists':
-          preloadComponent(() => import('./components/Artists'));
-          break;
-        case '/about':
-          preloadComponent(() => import('./components/About'));
-          break;
-        case '/events':
-          preloadComponent(() => import('./components/Events'));
-          break;
-        case '/artblogs':
-          preloadComponent(() => import('./components/ArtBlogs'));
-          break;
-        case '/artparty':
-          preloadComponent(() => import('./components/ArtParty'));
-          break;
-          case '/moments':
-            preloadComponent(() => import('./components/Moments'));
-            break;
-          case '/contact':
-            preloadComponent(() => import('./components/Contact'));
-            break;
-          case '/admin/artpartyimages':
-            preloadComponent(() => import('./components/AdminArtPartyImages'));
-            break;
-          case '/admin/moments':
-            preloadComponent(() => import('./components/AdminMoments'));
-            break;
-        }
-        preloadTimeouts.delete(href);
-      }, 300); // 300ms delay
-      
-      preloadTimeouts.set(href, timeoutId);
-    }
+  window.addEventListener('DOMContentLoaded', () => {
+    // Only preload most critical route after initial load
+    setTimeout(() => {
+      preloadRouteChunks('/home');
+    }, 2000);
   });
 }
 
@@ -472,6 +424,26 @@ const AppContent = () => {
       console.error('Server connection error:', error);
     }
   });
+
+  // Attach hover preloading to navigation links
+  useEffect(() => {
+    const handleMouseOver = (e) => {
+      const link = e.target.closest('a');
+      if (link) {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('/')) {
+          preloadRouteChunks(href);
+        }
+      }
+    };
+
+    // Use event delegation for better performance
+    document.addEventListener('mouseover', handleMouseOver);
+    
+    return () => {
+      document.removeEventListener('mouseover', handleMouseOver);
+    };
+  }, []);
 
   // Check if video has been completed
   useEffect(() => {

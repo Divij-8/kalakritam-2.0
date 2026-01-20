@@ -215,10 +215,10 @@
 /* Gallery Grid */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, 320px);
+  gap: 24px;
   padding: 20px 0;
-  justify-items: center;
+  justify-content: center;
   /* Mobile optimization */
   contain: layout style;
 }
@@ -226,11 +226,18 @@
 /* Mobile-specific grid optimizations */
 @media (max-width: 768px) {
   .gallery-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
     padding: 1rem 0 !important;
     /* Use CSS containment for better performance */
     contain: layout style paint;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
   }
 }
 

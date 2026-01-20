@@ -117,19 +117,8 @@ const Artists = () => {
             <p className="artists-subtitle">Meet Our Master Creators</p>
           </header>
           
-          <section className="artists-filters">
-            <h3>Filter by Category</h3>
-            <div className="category-filters">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="loading-skeleton" style={{ width: '100px', height: '36px', borderRadius: '18px' }} />
-              ))}
-            </div>
-          </section>
-          
-          <div className="artists-grid">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="loading-skeleton" style={{ width: '100%', height: '300px', borderRadius: '12px' }} />
-            ))}
+          <div className="loading-message" style={{ textAlign: 'center', padding: '3rem', color: '#c38f21' }}>
+            <p style={{ fontSize: '1.2rem' }}>Loading artists...</p>
           </div>
         </div>
         <Footer />

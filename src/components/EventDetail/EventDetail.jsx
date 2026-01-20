@@ -223,24 +223,8 @@ const EventDetail = () => {
         <VideoLogo />
         <Header />
         <div className="event-detail-content loading-state">
-          <div className="detail-skeleton-container">
-            <div className="loading-skeleton detail-hero-skeleton" style={{ width: '100%', height: '350px', borderRadius: '16px' }} />
-            <div className="detail-info-skeleton">
-              <div className="loading-skeleton skeleton-title" style={{ width: '60%', height: '36px' }} />
-              <div className="detail-meta-skeleton">
-                <div className="loading-skeleton" style={{ width: '120px', height: '20px' }} />
-                <div className="loading-skeleton" style={{ width: '150px', height: '20px' }} />
-                <div className="loading-skeleton" style={{ width: '100px', height: '20px' }} />
-              </div>
-              <div className="loading-skeleton" style={{ width: '100%', height: '16px' }} />
-              <div className="loading-skeleton" style={{ width: '100%', height: '16px' }} />
-              <div className="loading-skeleton" style={{ width: '85%', height: '16px' }} />
-              <div className="loading-skeleton" style={{ width: '70%', height: '16px' }} />
-              <div className="detail-actions-skeleton">
-                <div className="loading-skeleton" style={{ width: '150px', height: '48px', borderRadius: '24px' }} />
-                <div className="loading-skeleton" style={{ width: '150px', height: '48px', borderRadius: '24px' }} />
-              </div>
-            </div>
+          <div className="loading-message" style={{ textAlign: 'center', padding: '3rem', color: '#c38f21' }}>
+            <p style={{ fontSize: '1.2rem' }}>Loading event details...</p>
           </div>
         </div>
         <Footer />
