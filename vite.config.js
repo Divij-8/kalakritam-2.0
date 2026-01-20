@@ -40,16 +40,11 @@ export default defineConfig({
             return 'vendor-router';
           }
           
-          // MUI Core components - used across multiple pages
-          if (id.includes('node_modules/@mui/material/') || 
-              id.includes('node_modules/@mui/system/') ||
-              id.includes('node_modules/@emotion/')) {
-            return 'vendor-mui-core';
-          }
-          
-          // MUI Charts - only used in admin financials
-          if (id.includes('node_modules/@mui/x-charts/')) {
-            return 'vendor-mui-charts';
+          // MUI and Emotion - MUST stay together to avoid circular dependency issues
+          if (id.includes('node_modules/@mui/') || 
+              id.includes('node_modules/@emotion/') ||
+              id.includes('node_modules/@babel/runtime')) {
+            return 'vendor-mui';
           }
           
           // Three.js and related - only used in specific components

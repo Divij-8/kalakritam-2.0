@@ -19883,7 +19883,7 @@ var setupUploadRoutes = /* @__PURE__ */ __name2((app2) => {
               contentType: file.type
             }
           });
-          const publicUrl = c.env.CLOUDFLARE_R2_PUBLIC_URL ? `${c.env.CLOUDFLARE_R2_PUBLIC_URL}/${filename}` : `https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/${filename}`;
+          const publicUrl = c.env.CLOUDFLARE_R2_PUBLIC_URL ? `${c.env.CLOUDFLARE_R2_PUBLIC_URL}/${filename}` : `https://www.cdn.kalakritam.in/${filename}`;
           return c.json({
             success: true,
             message: "Image uploaded successfully to R2",
@@ -19990,7 +19990,7 @@ var setupUploadRoutes = /* @__PURE__ */ __name2((app2) => {
               contentType: file.type
             }
           });
-          const publicUrl = c.env.CLOUDFLARE_R2_PUBLIC_URL ? `${c.env.CLOUDFLARE_R2_PUBLIC_URL}/${fullPath}` : `https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/${fullPath}`;
+          const publicUrl = c.env.CLOUDFLARE_R2_PUBLIC_URL ? `${c.env.CLOUDFLARE_R2_PUBLIC_URL}/${fullPath}` : `https://www.cdn.kalakritam.in/${fullPath}`;
           return c.json({
             success: true,
             message: "PDF uploaded successfully to R2",
@@ -20049,7 +20049,7 @@ var setupUploadRoutes = /* @__PURE__ */ __name2((app2) => {
       const fileExtension = filename.split(".").pop();
       const uniqueFilename = `${timestamp}-${Math.random().toString(36).substring(7)}.${fileExtension}`;
       if (c.env.R2_BUCKET) {
-        const publicUrl = c.env.CLOUDFLARE_R2_PUBLIC_URL ? `${c.env.CLOUDFLARE_R2_PUBLIC_URL}/${uniqueFilename}` : `https://pub-9cdd84716e0341ba9fa9c0b6875b5572.r2.dev/${uniqueFilename}`;
+        const publicUrl = c.env.CLOUDFLARE_R2_PUBLIC_URL ? `${c.env.CLOUDFLARE_R2_PUBLIC_URL}/${uniqueFilename}` : `https://www.cdn.kalakritam.in/${uniqueFilename}`;
         return c.json({
           success: true,
           message: "Use direct upload endpoint instead of presigned URL",
