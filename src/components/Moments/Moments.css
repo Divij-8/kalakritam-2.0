@@ -126,41 +126,35 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  -webkit-animation-duration: 40s;
   animation-duration: 40s;
-  -webkit-animation-timing-function: linear;
   animation-timing-function: linear;
-  -webkit-animation-iteration-count: infinite;
   animation-iteration-count: infinite;
-  -webkit-animation-play-state: running;
   animation-play-state: running;
   will-change: transform;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 /* Staggered animation for each column */
 .masonry-column:nth-child(1) {
-  -webkit-animation: scrollUp 40s linear infinite;
-  animation: scrollUp 40s linear infinite;
+  animation-name: scrollUp;
   animation-delay: 0s;
 }
 
 .masonry-column:nth-child(2) {
-  -webkit-animation: scrollDown 40s linear infinite;
-  animation: scrollDown 40s linear infinite;
+  animation-name: scrollDown;
   animation-delay: 2s;
 }
 
 .masonry-column:nth-child(3) {
-  -webkit-animation: scrollUp 40s linear infinite;
-  animation: scrollUp 40s linear infinite;
+  animation-name: scrollUp;
   animation-delay: 4s;
 }
 
 .masonry-column:nth-child(4) {
-  -webkit-animation: scrollDown 40s linear infinite;
-  animation: scrollDown 40s linear infinite;
+  animation-name: scrollDown;
   animation-delay: 6s;
 }
 
@@ -264,7 +258,10 @@
 @media (max-width: 768px) {
   .scrolling .moments-container .masonry-column,
   .moments-container.scrolling .masonry-column,
-  .moments-container .masonry-column {
+  .moments-container .masonry-column,
+  body.scrolling .masonry-column,
+  html.scrolling .masonry-column,
+  .masonry-column {
     -webkit-animation-play-state: running !important;
     animation-play-state: running !important;
     transition-duration: initial !important;

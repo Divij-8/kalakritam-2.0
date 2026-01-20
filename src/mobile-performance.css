@@ -132,10 +132,17 @@
     animation-timing-function: ease-out !important;
   }
   
-  /* Disable non-essential animations on scroll */
-  .scrolling * {
+  /* Disable non-essential animations on scroll - EXCEPT Moments masonry columns */
+  .scrolling *:not(.masonry-column) {
     animation-play-state: paused !important;
     transition-duration: 0ms !important;
+  }
+  
+  /* Keep Moments masonry column animations running on mobile */
+  .scrolling .masonry-column,
+  .moments-container .masonry-column {
+    animation-play-state: running !important;
+    transition-duration: initial !important;
   }
 }
 
