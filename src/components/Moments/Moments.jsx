@@ -126,6 +126,61 @@ const Moments = () => {
       fetchMoments();
       fetchCalled.current = true;
     }
+
+    // SEO meta tags for Kalakritam Moments
+    document.title = 'Moments - Kalakritam | Art Workshop Highlights & Memories in Hyderabad';
+
+    const metaDescription = document.querySelector('meta[name="description"]');
+    const descriptionContent = 'Relive the best moments from Kalakritam art workshops in Hyderabad. Browse photos and highlights from our traditional & contemporary art sessions, events, and community gatherings.';
+    if (metaDescription) {
+      metaDescription.setAttribute('content', descriptionContent);
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = descriptionContent;
+      document.head.appendChild(meta);
+    }
+
+    const metaKeywords = document.querySelector('meta[name="keywords"]');
+    const keywordsContent = 'Kalakritam moments, art workshop photos Hyderabad, art class highlights, workshop memories, Kalakritam gallery, art event photos, Hyderabad art community, creative moments, kala kritam';
+    if (metaKeywords) {
+      metaKeywords.setAttribute('content', keywordsContent);
+    } else {
+      const keywords = document.createElement('meta');
+      keywords.name = 'keywords';
+      keywords.content = keywordsContent;
+      document.head.appendChild(keywords);
+    }
+
+    // Open Graph tags
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) {
+      const meta = document.createElement('meta');
+      meta.property = 'og:title';
+      meta.content = 'Moments - Kalakritam | Art Workshop Highlights in Hyderabad';
+      document.head.appendChild(meta);
+    } else {
+      ogTitle.setAttribute('content', 'Moments - Kalakritam | Art Workshop Highlights in Hyderabad');
+    }
+
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    if (!ogDescription) {
+      const meta = document.createElement('meta');
+      meta.property = 'og:description';
+      meta.content = 'Browse highlights and memories from Kalakritam art workshops in Hyderabad.';
+      document.head.appendChild(meta);
+    } else {
+      ogDescription.setAttribute('content', 'Browse highlights and memories from Kalakritam art workshops in Hyderabad.');
+    }
+
+    // Canonical URL
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+    canonical.href = 'https://kalakritam.in/moments';
   }, []);
 
   const fetchMoments = async () => {
