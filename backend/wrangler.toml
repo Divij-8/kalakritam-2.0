@@ -1,0 +1,10 @@
+name = "kalakritam-api-dev"
+main = "src/app.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+NODE_ENV = "development"
+
+# Local dev secrets are loaded from .dev.vars:
+# - DATABASE_URL: Neon PostgreSQL connection string
+# - JWT_SECRET: strong random secret for token signing
