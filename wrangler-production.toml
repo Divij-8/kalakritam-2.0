@@ -1,5 +1,5 @@
 name = "kalakritam-api-production"
-main = "KALAKRITAM_PRODUCTION_NO_SAMPLE_DATA.js"
+main = "backend/src/app.js"
 compatibility_date = "2024-01-01"
 
 # Route the worker to api.kalakritam.in

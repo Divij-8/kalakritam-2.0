@@ -5,7 +5,11 @@ export function createDatabase(env) {
     throw new Error("DATABASE_URL environment variable is required");
   }
 
-  const sql = neon(env.DATABASE_URL);
+  const sql = neon(env.DATABASE_URL, {
+    connectionTimeoutMillis: 30000,
+    idleTimeoutMillis: 30000,
+    max: 10
+  });
 
   return {
     async query(text, params = []) {

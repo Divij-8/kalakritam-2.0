@@ -29,45 +29,4 @@ export function setupMomentsRoutes(app) {
     }
   }));
 
-  app.get("/artparty/images", catchAsync(async (c) => {
-    const db = createDatabase(c.env);
-    try {
-      await db.query(`
-        CREATE TABLE IF NOT EXISTS images (
-          id UUID PRIMARY KEY,
-          title VARCHAR(255),
-          description TEXT,
-          image_url TEXT,
-          alt_text VARCHAR(255),
-          category VARCHAR(100),
-          tags JSONB DEFAULT '[]',
-          featured BOOLEAN DEFAULT false,
-          created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-      const featuredOnly = c.req.query("featured");
-      const params = ["artparty"];
-      let where = "WHERE LOWER(category) = LOWER($1) AND image_url IS NOT NULL";
-      if (featuredOnly === "true") {
-        where += " AND featured = true";
-      }
-      const query = `
-        SELECT id, title, image_url, alt_text, featured, created_at
-        FROM images
-        ${where}
-        ORDER BY featured DESC, created_at DESC
-        LIMIT 50
-      `;
-      const result = await db.query(query, params);
-      const items = result.success ? result.data : [];
-      return c.json({
-        success: true,
-        message: "ArtParty images fetched",
-        data: items
-      });
-    } catch (error) {
-      return c.json({ success: false, message: "Failed to fetch ArtParty images", error: error.message }, 500);
-    }
-  }));
 }
